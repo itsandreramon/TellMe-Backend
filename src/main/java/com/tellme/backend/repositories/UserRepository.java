@@ -116,14 +116,14 @@ public class UserRepository implements UserDao {
                     Map<String, Object> userUpdates = new HashMap<>();
 
                     // Add userToFollowUid to follows list
-                    List<String> follows = userObject.getFollows();
+                    List<String> follows = userObject.getFollowing();
                     if (follows == null) follows = new ArrayList<>();
                     if (!follows.contains(userToFollowUid)) {
                         follows.add(userToFollowUid);
                     }
 
                     // Set updated list
-                    userUpdates.put(Constants.USER_KEY_FOLLOWS, follows);
+                    userUpdates.put(Constants.USER_KEY_FOLLOWING, follows);
                     var updateFuture = userCollection.document(document.getId()).update(userUpdates);
 
                     updateFuture.get();
@@ -159,15 +159,7 @@ public class UserRepository implements UserDao {
             // ok
         }
 
-        Map<String, Object> user = new HashMap<>();
-        user.put(Constants.USER_KEY_UID, uid);
-        user.put(Constants.USER_KEY_NAME, userToInsert.getName());
-        user.put(Constants.USER_KEY_AVATAR, userToInsert.getAvatar());
-        user.put(Constants.USER_KEY_EMAIL, getAuthUserByUid(uid).get().getEmail());
-        user.put(Constants.USER_KEY_USERNAME, userToInsert.getUsername());
-        user.put(Constants.USER_KEY_FOLLOWS, userToInsert.getFollows());
-
-        var addFuture = userCollection.add(user);
+        var addFuture = userCollection.add(FirebaseUtil.mapUserToMap(userToInsert));
 
         try {
             addFuture.get();
@@ -286,14 +278,21 @@ public class UserRepository implements UserDao {
     }
 
     @Override
-    public List<User> getFollowsByUserUid(String userUid) {
+    public List<User> getFollowingByUserUid(String userUid) {
         var user = getUserByUid(userUid);
 
         if (user.isPresent()) {
-            var followsList = user.get().getFollows();
+            var followsList = user.get().getFollowing();
 
             return followsList.stream()
-                    .map(this::getUserByUid)
+                    .map(uid -> {
+                        try {
+                            return getUserByUid(uid);
+                        } catch (Exception e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toList());

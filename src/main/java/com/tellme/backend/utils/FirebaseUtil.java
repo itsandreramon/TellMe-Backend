@@ -7,7 +7,9 @@ import com.tellme.backend.model.Tell;
 import com.tellme.backend.model.User;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseUtil {
 
@@ -41,8 +43,9 @@ public class FirebaseUtil {
     }
 
     public static User mapDocumentToUser(DocumentSnapshot document) {
-        var follows = (List<String>) document.get(Constants.USER_KEY_FOLLOWS);
+        var follows = (List<String>) document.get(Constants.USER_KEY_FOLLOWING);
         var followers = (List<String>) document.get(Constants.USER_KEY_FOLLOWERS);
+        var about = String.valueOf(document.get(Constants.USER_KEY_ABOUT));
         var avatar = String.valueOf(document.get(Constants.USER_KEY_AVATAR));
         final var name = String.valueOf(document.get(Constants.USER_KEY_NAME));
         final var uid = String.valueOf(document.get(Constants.USER_KEY_UID));
@@ -54,14 +57,28 @@ public class FirebaseUtil {
         if (avatar.equals("null")) avatar = null;
 
         return User.builder()
-                .follows(follows)
+                .following(follows)
                 .followers(followers)
+                .about(about)
                 .name(name)
                 .uid(uid)
                 .username(username)
                 .email(email)
                 .avatar(avatar)
                 .build();
+    }
+
+    public static Map<String, Object> mapUserToMap(User user) {
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put(Constants.USER_KEY_UID, user.getUid());
+        userMap.put(Constants.USER_KEY_NAME, user.getName());
+        userMap.put(Constants.USER_KEY_AVATAR, user.getAvatar());
+        userMap.put(Constants.USER_KEY_EMAIL, user.getEmail());
+        userMap.put(Constants.USER_KEY_USERNAME, user.getUsername());
+        userMap.put(Constants.USER_KEY_FOLLOWING, user.getFollowing());
+        userMap.put(Constants.USER_KEY_FOLLOWERS, user.getFollowers());
+        userMap.put(Constants.USER_KEY_ABOUT, user.getAbout());
+        return userMap;
     }
 
     public static AuthUser mapRecordToAuthUser(UserRecord userRecord) {
