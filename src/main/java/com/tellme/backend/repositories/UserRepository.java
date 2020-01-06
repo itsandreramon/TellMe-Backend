@@ -10,6 +10,7 @@ import com.tellme.backend.model.AuthUser;
 import com.tellme.backend.model.User;
 import com.tellme.backend.utils.Constants;
 import com.tellme.backend.utils.FirebaseUtil;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

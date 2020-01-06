@@ -15,15 +15,15 @@ import java.io.InputStream;
 public class FirebaseConfig {
 
     @Value("./serviceAccountKey.json")
-    private String serviceAccountPath;
+    private String serviceAccountKeyPath;
 
     @PostConstruct
     public void init() throws IOException {
-        InputStream serviceAccount = new FileInputStream(serviceAccountPath);
-        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+        FileInputStream serviceAccount = new FileInputStream(serviceAccountKeyPath);
 
         FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(credentials)
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setDatabaseUrl("https://tellme-a0cbc.firebaseio.com")
                 .build();
 
         FirebaseApp.initializeApp(options);
