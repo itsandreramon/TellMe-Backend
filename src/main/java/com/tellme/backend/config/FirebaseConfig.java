@@ -6,23 +6,27 @@ import com.google.firebase.FirebaseOptions;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 public class FirebaseConfig {
 
-    private String serviceAccountKeyPath = "./serviceAccountKey.json";
-
     @PostConstruct
     public void init() throws IOException {
-        FileInputStream serviceAccount = new FileInputStream(serviceAccountKeyPath);
-
         FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setCredentials(GoogleCredentials.fromStream(getServiceAccountKeyStream()))
                 .setDatabaseUrl("https://tellme-a0cbc.firebaseio.com")
                 .build();
 
         FirebaseApp.initializeApp(options);
+    }
+
+    private InputStream getServiceAccountKeyStream() {
+        try {
+            return getClass().getResourceAsStream("/serviceAccountKey.json");
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Please make sure to place the Firebase serviceAccountKey.json inside the resources folder.");
+        }
     }
 }
