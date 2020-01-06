@@ -43,7 +43,7 @@ public class FirebaseUtil {
     }
 
     public static User mapDocumentToUser(DocumentSnapshot document) {
-        var follows = (List<String>) document.get(Constants.USER_KEY_FOLLOWING);
+        var following = (List<String>) document.get(Constants.USER_KEY_FOLLOWING);
         var followers = (List<String>) document.get(Constants.USER_KEY_FOLLOWERS);
         var about = String.valueOf(document.get(Constants.USER_KEY_ABOUT));
         var avatar = String.valueOf(document.get(Constants.USER_KEY_AVATAR));
@@ -52,12 +52,12 @@ public class FirebaseUtil {
         final var username = String.valueOf(document.get(Constants.USER_KEY_USERNAME));
         final var email = String.valueOf(document.get(Constants.USER_KEY_EMAIL));
 
-        if (follows == null) follows = Collections.emptyList();
+        if (following == null) following = Collections.emptyList();
         if (followers == null) followers = Collections.emptyList();
         if (avatar.equals("null")) avatar = null;
 
         return User.builder()
-                .following(follows)
+                .following(following)
                 .followers(followers)
                 .about(about)
                 .name(name)
@@ -70,6 +70,7 @@ public class FirebaseUtil {
 
     public static Map<String, Object> mapUserToMap(User user) {
         Map<String, Object> userMap = new HashMap<>();
+
         userMap.put(Constants.USER_KEY_UID, user.getUid());
         userMap.put(Constants.USER_KEY_NAME, user.getName());
         userMap.put(Constants.USER_KEY_AVATAR, user.getAvatar());
@@ -78,6 +79,9 @@ public class FirebaseUtil {
         userMap.put(Constants.USER_KEY_FOLLOWING, user.getFollowing());
         userMap.put(Constants.USER_KEY_FOLLOWERS, user.getFollowers());
         userMap.put(Constants.USER_KEY_ABOUT, user.getAbout());
+
+        System.err.println(userMap + "map map");
+
         return userMap;
     }
 

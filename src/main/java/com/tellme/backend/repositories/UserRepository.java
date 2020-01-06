@@ -159,7 +159,9 @@ public class UserRepository implements UserDao {
             // ok
         }
 
-        var addFuture = userCollection.add(FirebaseUtil.mapUserToMap(userToInsert));
+        System.err.println(userToInsert + "bla bla");
+        // userCollection.add(userToInsert);
+        var addFuture = userCollection.add(userToInsert);
 
         try {
             addFuture.get();
@@ -194,6 +196,8 @@ public class UserRepository implements UserDao {
 
     @Override
     public Optional<Boolean> updateUser(User updatedUser) {
+        System.err.println(updatedUser);
+
         var userToUpdateBackUp = getUserByUid(updatedUser.getUid());
 
         if (userToUpdateBackUp.isEmpty()) {
