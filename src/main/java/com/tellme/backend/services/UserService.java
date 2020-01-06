@@ -55,6 +55,6 @@ public class UserService {
     }
 
     public List<User> getFollowsByUserUid(String userUid) {
-        return userRepository.getFollowsByUserUid(userUid);
+        return userRepository.getFollowingByUserUid(userUid);
     }
 }

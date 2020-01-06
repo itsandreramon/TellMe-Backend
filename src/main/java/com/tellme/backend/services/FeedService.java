@@ -1,6 +1,5 @@
 package com.tellme.backend.services;
 
-import com.tellme.backend.exceptions.UserNotFoundException;
 import com.tellme.backend.model.FeedItem;
 import com.tellme.backend.model.User;
 import com.tellme.backend.repositories.TellRepository;
@@ -24,24 +23,29 @@ public class FeedService {
     }
 
     public List<FeedItem> getFeedByUserUid(String uid) {
-        var follows = userRepository.getFollowsByUserUid(uid);
-        var tellFeed = tellRepository.getTellFeedByUserUid(
-                uid,
-                follows.stream().map(User::getUid).collect(Collectors.toList())
-        );
+
+        // we only need the uids
+        var follows = userRepository.getFollowingByUserUid(uid).stream()
+                .map(User::getUid)
+                .collect(Collectors.toList());
+
+        var tellFeed = tellRepository.getTellFeedByUserUid(uid, follows);
+
         System.out.println(tellFeed);
 
         var feed = tellFeed.stream()
                 .map(tell -> {
-                    var user = userRepository.getUserByUid(tell.getReceiverUid());
-                    if (user.isEmpty()) throw new UserNotFoundException(tell.getReceiverUid());
+                    try {
+                        System.out.println("trying...");
+                        var user = userRepository.getUserByUid(tell.getReceiverUid());
+                        var authUser = userRepository.getAuthUserByUid(user.get().getUid());
+                        var feedItem = TransformationUtil.transformToFeedItem(tell, user.get());
 
-                    var authUser = userRepository.getAuthUserByUid(user.get().getUid());
-                    if (authUser.isEmpty()) throw new UserNotFoundException(tell.getReceiverUid());
-
-                    var feedItem = TransformationUtil.transformToFeedItem(tell, user.get());
-
-                    return feedItem;
+                        return feedItem;
+                    } catch (Exception e) {
+                        System.out.println("exception...");
+                        return null;
+                    }
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());

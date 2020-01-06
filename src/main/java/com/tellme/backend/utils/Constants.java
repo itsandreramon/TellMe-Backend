@@ -14,8 +14,9 @@ public class Constants {
     public final static String USER_KEY_AVATAR = "avatar";
     public final static String USER_KEY_EMAIL = "email";
     public final static String USER_KEY_USERNAME = "username";
-    public final static String USER_KEY_FOLLOWS = "follows";
+    public final static String USER_KEY_FOLLOWING = "following";
     public final static String USER_KEY_FOLLOWERS = "followers";
+    public final static String USER_KEY_ABOUT = "about";
 
     public final static String FEED_ITEM_KEY_ID = "id";
     public final static String FEED_ITEM_KEY_RECEIVER_USERNAME = "receiverUsername";

@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class User {
 
     @NotBlank
@@ -33,8 +34,11 @@ public class User {
     @JsonProperty(Constants.USER_KEY_AVATAR)
     String avatar;
 
-    @JsonProperty(Constants.USER_KEY_FOLLOWS)
-    List<String> follows;
+    @JsonProperty(Constants.USER_KEY_ABOUT)
+    String about;
+
+    @JsonProperty(Constants.USER_KEY_FOLLOWING)
+    List<String> following;
 
     @JsonProperty(Constants.USER_KEY_FOLLOWERS)
     List<String> followers;
