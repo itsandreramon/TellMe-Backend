@@ -6,7 +6,7 @@ The REST backend for TellMe. Written entirely in Java using Spring Boot and Fire
 ### Development
 You can start the Spring Boot application in a variety of ways:
 
-1. Build a .jar from the sources and run it via CLI
+1. Build a .jar from the sources and run it locally via the Java CLI
 ```
 $ ./gradlew bootJar
 $ java -jar build/libs/backend-0.0.1-SNAPSHOT.jar
