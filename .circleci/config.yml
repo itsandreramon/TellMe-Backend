@@ -42,9 +42,9 @@ jobs:
 
       - run:
           name: Create build
-          command: gradle build --stacktrace
+          command: ./gradlew build --stacktrace
 
-      - run: gradle test
+      - run: ./gradlew test
 
   deploy:
     docker:
@@ -54,4 +54,6 @@ jobs:
       - checkout
       - run:
           name: Deploy to Heroku
-          command: ./gradlew deployHeroku --stacktrace
+          command: |
+            ./gradlew build --stacktrace
+            ./gradlew deployHeroku --stacktrace
