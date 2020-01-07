@@ -31,10 +31,6 @@ build.configure {
 	build.mustRunAfter clean
 }
 
-bootJar.configure {
-	dependsOn decryptApiKeyTask
-}
-
 dependencies {
 	implementation 'com.google.firebase:firebase-admin:6.11.0'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
