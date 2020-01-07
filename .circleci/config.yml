@@ -54,4 +54,4 @@ jobs:
       - checkout
       - run:
           name: Deploy to Heroku
-          command: ./gradlew deployHeroku
+          command: ./gradlew deployHeroku --stacktrace
