@@ -39,7 +39,7 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    @CrossOrigin("localhost:8080")
     @GetMapping("/users/uid/{uid}")
     public ResponseEntity<User> getUserByUid(@PathVariable("uid") String uid) {
         return userService.getUserByUid(uid)
