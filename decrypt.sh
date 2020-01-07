@@ -1,1 +1,0 @@
-openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json

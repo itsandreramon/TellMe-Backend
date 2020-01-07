@@ -26,13 +26,6 @@ task buildZip(type: Zip) {
 	}
 }
 
-task stage(dependsOn: ['build', 'clean'])
-
-task decryptApiKeyTask(type: Exec) { decryptApiKeyTask ->
-	workingDir '.'
-	commandLine 'sh', './decrypt.sh'
-}
-
 build.configure {
 	dependsOn bootJar
 	build.mustRunAfter clean
