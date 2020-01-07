@@ -42,9 +42,6 @@ bootJar.configure {
 	dependsOn decryptApiKeyTask
 }
 
-task stage(dependsOn: ['build', 'clean'])
-build.mustRunAfter clean
-
 dependencies {
 	implementation 'com.google.firebase:firebase-admin:6.11.0'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
