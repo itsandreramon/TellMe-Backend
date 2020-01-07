@@ -56,4 +56,5 @@ jobs:
           name: Deploy to Heroku
           command: |
             ./gradlew build --stacktrace
+            sudo chmod +x ./build/libs/backend-0.1.jar
             ./gradlew deployHeroku --stacktrace
