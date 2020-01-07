@@ -26,7 +26,21 @@ task buildZip(type: Zip) {
 	}
 }
 
-build.dependsOn buildZip
+task stage(dependsOn: ['build', 'clean'])
+
+task decryptApiKeyTask(type: Exec) { decryptApiKeyTask ->
+	workingDir '.'
+	commandLine 'sh', './decrypt.sh'
+}
+
+build.configure {
+	dependsOn bootJar
+	build.mustRunAfter clean
+}
+
+bootJar.configure {
+	dependsOn decryptApiKeyTask
+}
 
 dependencies {
 	implementation 'com.google.firebase:firebase-admin:6.11.0'

@@ -27,11 +27,6 @@ public class TellController {
         this.inboxService = inboxService;
     }
 
-    @GetMapping("/")
-    public String hello() {
-        return "Running...";
-    }
-
     @GetMapping("/tells")
     public List<Tell> getAllTells() {
         return tellService.getAllTells();
