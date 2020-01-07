@@ -1,4 +1,16 @@
 version: 2
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
 jobs:
   build:
     docker:
@@ -12,6 +24,9 @@ jobs:
 
     steps:
       - checkout
+      - run:
+          name: Create serviceAccountKey.json
+          command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json
 
       - restore_cache:
           keys:
@@ -25,5 +40,17 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: gradle build --stacktrace
+      - run:
+          name: Create build
+          command: gradle build --stacktrace
+
       - run: gradle test
+
+  deploy:
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Heroku
+          command: gradle deployHeroku
