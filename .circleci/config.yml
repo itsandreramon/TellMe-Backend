@@ -40,7 +40,10 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      - run: gradle build --stacktrace
+      - run:
+          name: Create build
+          command: gradle build --stacktrace
+
       - run: gradle test
 
   deploy:
@@ -49,6 +52,5 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Deploy Master to Heroku
-          command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+          name: Deploy to Heroku
+          command: gradle deployHeroku
