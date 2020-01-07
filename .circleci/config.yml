@@ -25,16 +25,5 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
       - run: gradle build --stacktrace
-=======
-      - run:
-          command: |
-            gradle build --stacktrace
-
->>>>>>> 5ebcc3c... (CircleCI) : Test
-=======
-      - run: gradle build --stacktrace
->>>>>>> 43f4120... (CircleCI) : Update config
       - run: gradle test
