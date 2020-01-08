@@ -51,7 +51,7 @@ test {
 
 heroku {
 	appName = "tellme-backend"
-	includes = ["build/libs/backend-0.1.jar"]
+	includes = ["app.jar"]
 	includeBuildDir = false
 }
 
