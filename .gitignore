@@ -34,4 +34,4 @@ out/
 # Do not commit plain text api key
 serviceAccountKey.json
 
-.DS_Stores
+.DS_Store
