@@ -22,7 +22,6 @@ jobs:
       - run:
           name: Create serviceAccountKey.json
           command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json
-      - run: mvn package
       - run:
           name: Deploy to Heroku
           command: HEROKU_API_KEY=$HEROKU_API_KEY mvn heroku:deploy
