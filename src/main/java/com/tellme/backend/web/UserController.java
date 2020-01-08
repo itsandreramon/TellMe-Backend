@@ -86,8 +86,8 @@ public class UserController {
   }
 
   @GetMapping("/users/uid/{uid}/follows")
-  public List<User> getFollowsByUserUid(@PathVariable("uid") String userUid) {
-    return userService.getFollowsByUserUid(userUid);
+  public List<User> getFollowingByUserUid(@PathVariable("uid") String userUid) {
+    return userService.getFollowingByUserUid(userUid);
   }
 
   @PostMapping("/users/{uid}/follow/{uidToFollow}")

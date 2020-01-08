@@ -1,14 +1,31 @@
 version: 2
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
 jobs:
-  build:
+  deploy:
+    working_directory: ~/tellme-backend
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: circleci/openjdk:11-jdk-stretch
 
-    working_directory: ~/tellMe-backend
+    steps:
+      - run:
+          name: Deploy to Heroku
+          command: HEROKU_API_KEY=$HEROKU_API_KEY mvn heroku:deploy
 
-    environment:
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
+  build:
+    working_directory: ~/tellme-backend
+    docker:
+      - image: circleci/openjdk:11-jdk-stretch
 
     steps:
       - checkout
@@ -16,21 +33,15 @@ jobs:
           name: Create serviceAccountKey.json
           command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json
       - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-      - run: gradle dependencies
+          key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
+      - run: mvn dependency:go-offline
       - save_cache:
           paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-      - run:
-          name: Check code style
-          command: ./gradlew spotlessCheck
-      - run:
-          name: Create build
-          command: ./gradlew build --stacktrace
-      - run:
-          name: Run tests
-          command: ./gradlew test
+            - ~/.m2
+          key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
+      - run: mvn spotless:check
+      - run: mvn package
+      - store_test_results:
+          path: target/surefire-reports
+      - store_artifacts:
+          path: target/demo-java-spring-0.0.1-SNAPSHOT.jar
