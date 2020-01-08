@@ -31,10 +31,17 @@ public class FirebaseConfig {
 
   private InputStream getServiceAccountKeyStream() {
     try {
-      return getClass().getResourceAsStream("/serviceAccountKey.json");
+      final var key = getClass().getResourceAsStream("/serviceAccountKey.json");
+
+      if (key != null) {
+        return key;
+      }
     } catch (Exception e) {
       throw new IllegalArgumentException(
           "Please make sure to place the Firebase serviceAccountKey.json inside the resources folder.");
     }
+
+    throw new IllegalArgumentException(
+            "Please make sure to place the Firebase serviceAccountKey.json inside the resources folder.");
   }
 }
