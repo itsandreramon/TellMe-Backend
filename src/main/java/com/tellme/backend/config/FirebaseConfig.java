@@ -30,7 +30,6 @@ public class FirebaseConfig {
     FirebaseApp.initializeApp(options);
   }
 
-
   private static InputStream getServiceAccountKeyStream() {
     try {
       return new ClassPathResource("/serviceAccountKey.json").getInputStream();

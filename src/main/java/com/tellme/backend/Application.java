@@ -7,14 +7,10 @@
 
 package com.tellme.backend;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.core.io.ClassPathResource;
 
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
