@@ -8,13 +8,13 @@ You can start the Spring Boot application in a variety of ways:
 
 1. Build a .jar from the sources and run it locally via the Java CLI
 ```
-$ ./gradlew bootJar
+$ ./gradlew build
 $ java -jar build/libs/backend-0.1.jar
 ```
 
 2. Run it locally via the Heroku CLI
 ```
-$ ./gradlew stage
+$ ./gradlew build
 $ heroku local web
 ```
 
