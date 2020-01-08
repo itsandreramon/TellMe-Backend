@@ -2,7 +2,7 @@
 [![Build Status](https://img.shields.io/uptimerobot/ratio/m784110259-46982a9bb52d30acae5d40e6)](https://uptimerobot.com/dashboard#784110259)
 
 # TellMe-Backend
-The REST backend for TellMe. Written entirely in Java using Spring Boot and Firebase.
+The REST backend for TellMe. Written entirely in Java using [Spring Boot](https://github.com/spring-projects/spring-boot) and [Firebase](https://github.com/firebase/firebase-admin-java).
 
 ### Development
 You can start the Spring Boot application in a variety of ways:
