@@ -131,6 +131,8 @@ public class UserRepository implements UserDao {
           var updateFuture = userCollection.document(document.getId()).update(userUpdates);
 
           updateFuture.get();
+          addUserToFollowerList(userToFollowUid, userUid);
+          // Ok
           return Optional.of(true);
         } else {
           // double check since the data could have changed already
@@ -144,6 +146,29 @@ public class UserRepository implements UserDao {
     }
 
     throw new UserNotFollowedException(userToFollowUid);
+  }
+
+  private Optional<Boolean> addUserToFollowerList(String uid, String followerUid)
+      throws UserNotUpdatedException {
+    final var optionalUser = getUserByUid(uid);
+    final var optionalFollower = getUserByUid(followerUid);
+
+    if (optionalUser.isEmpty()) {
+      throw new UserNotFoundException(uid);
+    }
+
+    if (optionalFollower.isEmpty()) {
+      throw new UserNotFoundException(followerUid);
+    }
+
+    final var user = optionalUser.get();
+    final var userFollowers = user.getFollowers();
+
+    userFollowers.add(followerUid);
+    user.setFollowers(userFollowers.stream().distinct().collect(Collectors.toList()));
+
+    updateUser(user);
+    return Optional.of(true);
   }
 
   @Override

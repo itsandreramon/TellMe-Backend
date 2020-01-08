@@ -15,6 +15,6 @@ public class HelloController {
 
   @GetMapping("/")
   public String hello() {
-    return "Running...";
+    return "I'm gay...";
   }
 }
