@@ -32,3 +32,6 @@ build/
 
 # macOS
 .DS_Store
+
+# Do not commit plain text API keys
+serviceAccountKey.json
