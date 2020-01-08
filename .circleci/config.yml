@@ -1,5 +1,27 @@
 version: 2
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
 jobs:
+  deploy:
+    working_directory: ~/tellme-backend
+    docker:
+      - image: circleci/openjdk:11-jdk-stretch
+
+    steps:
+      - build
+      - run:
+          name: Deploy to Heroku
+          command: HEROKU_API_KEY=$HEROKU_API_KEY mvn heroku:deploy
   build:
     working_directory: ~/tellme-backend
     docker:
@@ -23,6 +45,3 @@ jobs:
           path: target/surefire-reports
       - store_artifacts:
           path: target/demo-java-spring-0.0.1-SNAPSHOT.jar
-      - run:
-          name: Deploy to Heroku
-          command: HEROKU_API_KEY=$HEROKU_API_KEY mvn heroku:deploy
