@@ -30,9 +30,9 @@ public class FirebaseConfig {
     FirebaseApp.initializeApp(options);
   }
 
-  private static InputStream getServiceAccountKeyStream() {
+  private InputStream getServiceAccountKeyStream() {
     try {
-      return new ClassPathResource("/serviceAccountKey.json").getInputStream();
+      return getClass().getResourceAsStream("/serviceAccountKey.json");
     } catch (Exception e) {
       throw new IllegalArgumentException(
           "Please make sure to place the Firebase serviceAccountKey.json inside the resources folder.");
