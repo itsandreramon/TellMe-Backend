@@ -37,4 +37,4 @@ jobs:
 
       - run:
           name: Deploy to Heroku
-          command: ./gradlew herokuDeploy
+          command: ./gradlew deployHeroku
