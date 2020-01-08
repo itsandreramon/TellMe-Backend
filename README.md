@@ -31,6 +31,8 @@ The Heroku deployment can be accessed via the following URL:
 https://tellme-backend.herokuapp.com/api/v1/tellme/
 ```
 
+### Code style
+This project uses [google-java-format](https://github.com/google/google-java-format) via [Spotless](https://github.com/diffplug/spotless) to format code based on the official [Google Java Style](https://google.github.io/styleguide/javaguide.html).
 ### API
 You can obtain a valid api key by decrypting the file using:
 ```
