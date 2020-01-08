@@ -22,7 +22,7 @@ $ heroku local web
 ### Deploy via Heroku
 ```
 $ ./gradlew bootJar
-$ heroku deploy:jar build/libs/backend-0.0.1-SNAPSHOT.jar --app tellme-backend
+$ heroku deploy:jar build/libs/backend-0.1.jar --app tellme-backend
 ```
 
 ### Accessing the Heroku Deployment
