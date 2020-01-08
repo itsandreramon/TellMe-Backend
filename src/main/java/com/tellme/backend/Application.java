@@ -1,24 +1,21 @@
+/*
+ * Copyright 2020 - André Thiele, Benjamin Will
+ *
+ * Fachbereich Informatik und Medien
+ * Technische Hochschule Brandenburg
+ */
+
 package com.tellme.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-public class Application {
+public class Application extends SpringBootServletInitializer {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-
-}
-
-@RestController
-class Controller {
-
-    @GetMapping("/")
-    String hello() {
-        return "Hello World!";
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
+  }
 }
