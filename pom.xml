@@ -64,7 +64,7 @@
                 <configuration>
                     <appName>tellme-backend</appName>
                     <processTypes>
-                        <web>java -Dserver.port=$PORT $JAVA_OPTS -cp target/classes:target/dependency/* Application</web>
+                        <web>java -jar target/backend-0.0.1-SNAPSHOT.jar</web>
                     </processTypes>
                     <includeTarget>false</includeTarget>
                     <includes>
