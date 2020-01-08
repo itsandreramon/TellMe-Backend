@@ -1,5 +1,4 @@
 [![Build Status](https://img.shields.io/circleci/build/github/itsandreramon/TellMe-Backend?token=925c8971ba4c49e3bde6365d720689b70d48a965)](https://circleci.com/gh/itsandreramon/TellMe-Backend)
-
 [![Build Status](https://img.shields.io/uptimerobot/ratio/m784110259-46982a9bb52d30acae5d40e6)](https://uptimerobot.com/dashboard#784110259)
 
 # TellMe-Backend
