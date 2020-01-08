@@ -62,4 +62,8 @@ public class UserService {
   public List<User> getFollowsByUserUid(String userUid) {
     return userRepository.getFollowingByUserUid(userUid);
   }
+
+  public Optional<Boolean> followUserByUID(String uid, String uidToFollow) {
+    return userRepository.followUserByUid(uid, uidToFollow);
+  }
 }

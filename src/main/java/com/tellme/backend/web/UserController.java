@@ -89,4 +89,13 @@ public class UserController {
   public List<User> getFollowsByUserUid(@PathVariable("uid") String userUid) {
     return userService.getFollowsByUserUid(userUid);
   }
+
+  @PostMapping("/users/{uid}/follow/{uidToFollow}")
+  public ResponseEntity<Boolean> followUserByUID(
+      @PathVariable("uid") String uid, @PathVariable("uidToFollow") String uidToFollow) {
+    return userService
+        .followUserByUID(uid, uidToFollow)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 }
