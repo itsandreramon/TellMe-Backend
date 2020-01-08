@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 public class FirebaseConfig {
@@ -29,19 +30,13 @@ public class FirebaseConfig {
     FirebaseApp.initializeApp(options);
   }
 
-  private InputStream getServiceAccountKeyStream() {
-    try {
-      final var key = getClass().getResourceAsStream("/serviceAccountKey.json");
 
-      if (key != null) {
-        return key;
-      }
+  private static InputStream getServiceAccountKeyStream() {
+    try {
+      return new ClassPathResource("/serviceAccountKey.json").getInputStream();
     } catch (Exception e) {
       throw new IllegalArgumentException(
           "Please make sure to place the Firebase serviceAccountKey.json inside the resources folder.");
     }
-
-    throw new IllegalArgumentException(
-            "Please make sure to place the Firebase serviceAccountKey.json inside the resources folder.");
   }
 }
