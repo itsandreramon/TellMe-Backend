@@ -51,8 +51,6 @@ test {
 
 heroku {
 	appName = "tellme-backend"
-	includes = ["app.jar"]
-	includeBuildDir = false
 }
 
 spotless {
