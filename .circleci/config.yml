@@ -18,7 +18,7 @@ jobs:
       - image: circleci/openjdk:11-jdk-stretch
 
     steps:
-      - build
+      - run: mvn package
       - run:
           name: Deploy to Heroku
           command: HEROKU_API_KEY=$HEROKU_API_KEY mvn heroku:deploy
