@@ -19,6 +19,9 @@ jobs:
 
     steps:
       - checkout
+      - run:
+          name: Create serviceAccountKey.json
+          command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json
       - run: mvn package
       - run:
           name: Deploy to Heroku
@@ -31,9 +34,6 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: Create serviceAccountKey.json
-          command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json
       - restore_cache:
           key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
