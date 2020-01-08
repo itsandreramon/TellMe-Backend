@@ -55,16 +55,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>com.tellme.backend.Application</mainClass>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -76,10 +66,6 @@
                     <processTypes>
                         <web>java -Dserver.port=$PORT $JAVA_OPTS -cp target/classes:target/dependency/* com.tellme.backend.Application</web>
                     </processTypes>
-                    <includeTarget>false</includeTarget>
-                    <includes>
-                        <include>target/backend-0.0.1-SNAPSHOT.jar</include>
-                    </includes>
                 </configuration>
             </plugin>
 
