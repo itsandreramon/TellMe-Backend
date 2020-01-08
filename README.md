@@ -4,6 +4,9 @@
 # TellMe-Backend
 The REST backend for TellMe. Written entirely in Java using [Spring Boot](https://github.com/spring-projects/spring-boot) and [Firebase](https://github.com/firebase/firebase-admin-java).
 
+- Uses [CircleCI](https://circleci.com/) for Continous Integration
+- ```master``` gets automatically deployed to [Heroku](https://www.heroku.com/)
+
 ### Development
 You can start the Spring Boot application in a variety of ways:
 
