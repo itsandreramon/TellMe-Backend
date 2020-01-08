@@ -62,6 +62,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <mainClass>com.tellme.backend.Application</mainClass>
+                </configuration>
             </plugin>
 
             <plugin>
