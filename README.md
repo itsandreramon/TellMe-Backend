@@ -1,4 +1,5 @@
 [![Build Status](https://img.shields.io/circleci/build/github/itsandreramon/TellMe-Backend?token=925c8971ba4c49e3bde6365d720689b70d48a965)](https://circleci.com/gh/itsandreramon/TellMe-Backend)
+[![Build Status](https://img.shields.io/uptimerobot/ratio/m784110259-46982a9bb52d30acae5d40e6)](https://uptimerobot.com/dashboard#784110259)
 
 # TellMe-Backend
 The REST backend for TellMe. Written entirely in Java using Spring Boot and Firebase.
@@ -8,13 +9,13 @@ You can start the Spring Boot application in a variety of ways:
 
 1. Build a .jar from the sources and run it locally via the Java CLI
 ```
-$ ./gradlew bootJar
-$ java -jar build/libs/backend-0.0.1-SNAPSHOT.jar
+$ ./gradlew build
+$ java -jar build/libs/backend-0.1.jar
 ```
 
 2. Run it locally via the Heroku CLI
 ```
-$ ./gradlew stage
+$ ./gradlew build
 $ heroku local web
 ```
 
