@@ -14,7 +14,7 @@ jobs:
       - checkout
       - run:
           name: Create serviceAccountKey.json
-          command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY sha1 >> ./src/main/resources/serviceAccountKey.json
+          command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY dgst -sha1 >> ./src/main/resources/serviceAccountKey.json
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "build.gradle" }}
