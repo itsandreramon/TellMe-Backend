@@ -15,21 +15,22 @@ jobs:
       - run:
           name: Create serviceAccountKey.json
           command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json
-
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "build.gradle" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-
       - run: gradle dependencies
       - save_cache:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
-
+      - run:
+          name: Check code style
+          command: ./gradlew spotlessCheck
       - run:
           name: Create build
           command: ./gradlew build --stacktrace
-
-      - run: ./gradlew test
+      - run:
+          name: Run tests
+          command: ./gradlew test
