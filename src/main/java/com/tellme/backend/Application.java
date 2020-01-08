@@ -1,3 +1,10 @@
+/*
+ * Copyright 2020 - André Thiele, Benjamin Will
+ *
+ * Fachbereich Informatik und Medien
+ * Technische Hochschule Brandenburg
+ */
+
 package com.tellme.backend;
 
 import org.springframework.boot.SpringApplication;
@@ -9,8 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"com.tellme.backend"})
 public class Application extends SpringBootServletInitializer {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-
+  public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
+  }
 }

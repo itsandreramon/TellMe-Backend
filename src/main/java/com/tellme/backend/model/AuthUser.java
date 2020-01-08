@@ -1,3 +1,10 @@
+/*
+ * Copyright 2020 - André Thiele, Benjamin Will
+ *
+ * Fachbereich Informatik und Medien
+ * Technische Hochschule Brandenburg
+ */
+
 package com.tellme.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,6 +18,6 @@ import lombok.*;
 @Builder
 public class AuthUser {
 
-    @JsonProperty(Constants.AUTH_USER_KEY_EMAIL)
-    String email;
+  @JsonProperty(Constants.AUTH_USER_KEY_EMAIL)
+  String email;
 }

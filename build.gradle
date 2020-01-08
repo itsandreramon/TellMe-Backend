@@ -2,6 +2,7 @@ plugins {
 	id "com.heroku.sdk.heroku-gradle" version "1.0.4"
 	id 'org.springframework.boot' version '2.2.2.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id "com.diffplug.gradle.spotless" version "3.27.0"
 	id 'java'
 }
 
@@ -34,6 +35,8 @@ build.configure {
 
 dependencies {
 	implementation 'com.google.firebase:firebase-admin:6.11.0'
+
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -50,4 +53,12 @@ heroku {
 	appName = "tellme-backend"
 	includes = ["build/libs/backend-0.1.jar"]
 	includeBuildDir = false
+}
+
+spotless {
+	java {
+		removeUnusedImports()
+		googleJavaFormat()
+		licenseHeaderFile project.rootProject.file('spotless/copyright.java')
+	}
 }
