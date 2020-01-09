@@ -1,5 +1,6 @@
 okta:
   oauth2:
     issuer: https://dev-373103.okta.com/oauth2/default
-    client-id: $TELL_ME_BACKEND_OKTA_CLIENT_ID
-    client-secret: $TELL_ME_BACKEND_OKTA_CLIENT_SECRET
+    clientId: $TELL_ME_BACKEND_OKTA_CLIENT_ID
+    clientSecret: $TELL_ME_BACKEND_OKTA_CLIENT_SECRET
+    scopes: openid
