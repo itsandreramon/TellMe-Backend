@@ -6,6 +6,7 @@ The REST backend for TellMe. Written entirely in Java using [Spring Boot](https:
 
 - Uses [CircleCI](https://circleci.com/) for Continous Integration
 - ```master``` gets automatically deployed to [Heroku](https://www.heroku.com/)
+- Uses [Okta](https://www.okta.com/) for authorization
 
 ### Development
 You can start the Spring Boot application in a variety of ways:
