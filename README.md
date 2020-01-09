@@ -33,7 +33,7 @@ $ heroku deploy:jar build/libs/backend-0.1.jar --app tellme-backend
 ### Accessing the Heroku Deployment
 The Heroku deployment can be accessed via the following URL:
 ```
-https://tellme-backend.herokuapp.com/api/v1/tellme/
+$ curl https://tellme-backend.herokuapp.com/ -H "Authorization: Bearer $TOKEN"
 ```
 
 ### Code style
