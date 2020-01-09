@@ -153,15 +153,13 @@ public class UserRepository implements UserDao {
 
     // check if both uids exist
     final var user = getUserByUid(uid).orElseThrow(() -> new UserNotFoundException(uid));
-    final var userFollower = getUserByUid(followerUid).orElseThrow(() -> new UserNotFoundException(followerUid));
+    final var userFollower =
+        getUserByUid(followerUid).orElseThrow(() -> new UserNotFoundException(followerUid));
 
     final var userFollowers = user.getFollowers();
 
     userFollowers.add(followerUid);
-    user.setFollowers(userFollowers.stream()
-            .distinct()
-            .collect(Collectors.toList())
-    );
+    user.setFollowers(userFollowers.stream().distinct().collect(Collectors.toList()));
 
     updateUser(user);
     return Optional.of(true);
