@@ -13,13 +13,13 @@ You can start the Spring Boot application in a variety of ways:
 
 1. Build a .jar from the sources and run it locally via the Java CLI
 ```
-$ ./gradlew build
+$ ./mvnw package
 $ java -jar build/libs/backend-0.1.jar
 ```
 
 2. Run it locally via the Heroku CLI
 ```
-$ ./gradlew build
+$ ./mvnw package
 $ heroku local web
 ```
 *Please make sure to built the project using Java 8 in order to acces the JAXB APIs. The JAXB APIs are considered Java EE APIs and were removed in Java 11.*
