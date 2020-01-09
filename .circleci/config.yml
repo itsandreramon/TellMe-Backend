@@ -24,7 +24,7 @@ jobs:
           command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json
       - run:
           name: Deploy to Heroku
-          command: HEROKU_API_KEY=$HEROKU_API_KEY mvn heroku:deploy
+          command: HEROKU_API_KEY=$HEROKU_API_KEY mvnw heroku:deploy
 
   build:
     working_directory: ~/tellme-backend
@@ -38,13 +38,13 @@ jobs:
           command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json
       - restore_cache:
           key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
-      - run: mvn dependency:go-offline
+      - run: mvnw dependency:go-offline
       - save_cache:
           paths:
             - ~/.m2
           key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
-      - run: mvn spotless:check
-      - run: mvn package
+      - run: mvnw spotless:check
+      - run: mvnw package
       - store_test_results:
           path: target/surefire-reports
       - store_artifacts:
