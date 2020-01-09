@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele, Benjamin Will
+ * Copyright 2020 - André Thiele
  *
  * Fachbereich Informatik und Medien
  * Technische Hochschule Brandenburg

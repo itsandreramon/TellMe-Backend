@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele, Benjamin Will
+ * Copyright 2020 - André Thiele
  *
  * Fachbereich Informatik und Medien
  * Technische Hochschule Brandenburg
@@ -12,6 +12,7 @@ import com.google.firebase.auth.UserRecord;
 import com.tellme.backend.model.AuthUser;
 import com.tellme.backend.model.Tell;
 import com.tellme.backend.model.User;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -20,16 +21,16 @@ import java.util.Map;
 public class FirebaseUtil {
 
   public static Tell mapDocumentToTell(DocumentSnapshot document) {
-    final var id = String.valueOf(document.get(Constants.TELL_KEY_ID));
-    final var question = String.valueOf(document.get(Constants.TELL_KEY_QUESTION));
-    final var reply = String.valueOf(document.get(Constants.TELL_KEY_REPLY));
-    final var authorUid = String.valueOf(document.get(Constants.TELL_KEY_SENDER_UID));
-    final var receiverUid = String.valueOf(document.get(Constants.TELL_KEY_RECEIVER_UID));
-    final var timestampSend = String.valueOf(document.get(Constants.TELL_KEY_SEND_DATE));
-    final var timestampReply = String.valueOf(document.get(Constants.TELL_KEY_REPLY_DATE));
+    String id = String.valueOf(document.get(Constants.TELL_KEY_ID));
+    String question = String.valueOf(document.get(Constants.TELL_KEY_QUESTION));
+    String reply = String.valueOf(document.get(Constants.TELL_KEY_REPLY));
+    String authorUid = String.valueOf(document.get(Constants.TELL_KEY_SENDER_UID));
+    String receiverUid = String.valueOf(document.get(Constants.TELL_KEY_RECEIVER_UID));
+    String timestampSend = String.valueOf(document.get(Constants.TELL_KEY_SEND_DATE));
+    String timestampReply = String.valueOf(document.get(Constants.TELL_KEY_REPLY_DATE));
 
-    var sendDate = DateUtils.convertStringToDate(timestampSend);
-    var replyDate = DateUtils.convertStringToDate(timestampReply);
+    ZonedDateTime sendDate = DateUtils.convertStringToDate(timestampSend);
+    ZonedDateTime replyDate = DateUtils.convertStringToDate(timestampReply);
 
     String sendDateString = null;
     String replyDateString = null;
@@ -49,14 +50,14 @@ public class FirebaseUtil {
   }
 
   public static User mapDocumentToUser(DocumentSnapshot document) {
-    var following = (List<String>) document.get(Constants.USER_KEY_FOLLOWING);
-    var followers = (List<String>) document.get(Constants.USER_KEY_FOLLOWERS);
-    var about = String.valueOf(document.get(Constants.USER_KEY_ABOUT));
-    var avatar = String.valueOf(document.get(Constants.USER_KEY_AVATAR));
-    final var name = String.valueOf(document.get(Constants.USER_KEY_NAME));
-    final var uid = String.valueOf(document.get(Constants.USER_KEY_UID));
-    final var username = String.valueOf(document.get(Constants.USER_KEY_USERNAME));
-    final var email = String.valueOf(document.get(Constants.USER_KEY_EMAIL));
+    List<String> following = (List<String>) document.get(Constants.USER_KEY_FOLLOWING);
+    List<String> followers = (List<String>) document.get(Constants.USER_KEY_FOLLOWERS);
+    String about = String.valueOf(document.get(Constants.USER_KEY_ABOUT));
+    String avatar = String.valueOf(document.get(Constants.USER_KEY_AVATAR));
+    String name = String.valueOf(document.get(Constants.USER_KEY_NAME));
+    String uid = String.valueOf(document.get(Constants.USER_KEY_UID));
+    String username = String.valueOf(document.get(Constants.USER_KEY_USERNAME));
+    String email = String.valueOf(document.get(Constants.USER_KEY_EMAIL));
 
     if (following == null) following = Collections.emptyList();
     if (followers == null) followers = Collections.emptyList();
@@ -92,8 +93,7 @@ public class FirebaseUtil {
   }
 
   public static AuthUser mapRecordToAuthUser(UserRecord userRecord) {
-    final var email = userRecord.getEmail();
-
+    String email = userRecord.getEmail();
     return AuthUser.builder().email(email).build();
   }
 }

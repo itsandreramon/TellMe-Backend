@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele, Benjamin Will
+ * Copyright 2020 - André Thiele
  *
  * Fachbereich Informatik und Medien
  * Technische Hochschule Brandenburg
@@ -117,7 +117,7 @@ public class TellRepository implements TellDao {
     tell.put(Constants.TELL_KEY_QUESTION, tellToInsert.getQuestion());
     tell.put(Constants.TELL_KEY_REPLY, tellToInsert.getReply());
 
-    var sendDate = DateUtils.convertStringToDate(tellToInsert.getSendDate()).toString();
+    String sendDate = DateUtils.convertStringToDate(tellToInsert.getSendDate()).toString();
     tell.put(Constants.TELL_KEY_SEND_DATE, sendDate);
 
     tell.put(Constants.TELL_KEY_REPLY_DATE, null);

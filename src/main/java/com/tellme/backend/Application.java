@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele, Benjamin Will
+ * Copyright 2020 - André Thiele
  *
  * Fachbereich Informatik und Medien
  * Technische Hochschule Brandenburg
@@ -16,7 +16,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 public class Application extends SpringBootServletInitializer {
 
   public static void main(String[] args) {
-    var app = new SpringApplication(Application.class);
+    SpringApplication app = new SpringApplication(Application.class);
     app.setBannerMode(Banner.Mode.OFF);
     app.run(args);
   }

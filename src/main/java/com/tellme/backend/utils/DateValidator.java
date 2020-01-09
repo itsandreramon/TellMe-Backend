@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele, Benjamin Will
+ * Copyright 2020 - André Thiele
  *
  * Fachbereich Informatik und Medien
  * Technische Hochschule Brandenburg
@@ -19,7 +19,7 @@ public class DateValidator implements ConstraintValidator<ValidDate, String> {
 
   @Override
   public boolean isValid(String timestamp, ConstraintValidatorContext cxt) {
-    var valid = true;
+    boolean valid = true;
 
     try {
       DateUtils.convertStringToDate(timestamp);

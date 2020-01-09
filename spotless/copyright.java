@@ -1,5 +1,5 @@
 /*
- * Copyright $YEAR - André Thiele, Benjamin Will
+ * Copyright $YEAR - André Thiele
  *
  * Fachbereich Informatik und Medien
  * Technische Hochschule Brandenburg

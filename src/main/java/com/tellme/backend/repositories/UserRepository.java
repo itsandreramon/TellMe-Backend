@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele, Benjamin Will
+ * Copyright 2020 - André Thiele
  *
  * Fachbereich Informatik und Medien
  * Technische Hochschule Brandenburg
@@ -7,10 +7,11 @@
 
 package com.tellme.backend.repositories;
 
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.Firestore;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
 import com.tellme.backend.exceptions.*;
 import com.tellme.backend.model.AuthUser;
@@ -34,17 +35,17 @@ public class UserRepository implements UserDao {
 
   @Override
   public Optional<User> getUserByUsername(String username) {
-    var query = userCollection.whereEqualTo(Constants.USER_KEY_USERNAME, username).limit(1);
-    var querySnapshot = query.get();
+    Query query = userCollection.whereEqualTo(Constants.USER_KEY_USERNAME, username).limit(1);
+    ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
     try {
 
       // querySnapshot.get() blocks
       if (querySnapshot.get().getDocuments().size() > 0) {
-        var document = querySnapshot.get().getDocuments().get(0);
+        QueryDocumentSnapshot document = querySnapshot.get().getDocuments().get(0);
 
         if (document.exists()) {
-          var user = FirebaseUtil.mapDocumentToUser(document);
+          User user = FirebaseUtil.mapDocumentToUser(document);
           return Optional.of(user);
         }
       }
@@ -58,8 +59,8 @@ public class UserRepository implements UserDao {
   @Override
   public Optional<AuthUser> getAuthUserByUid(String uid) {
     try {
-      var userRecord = FirebaseAuth.getInstance().getUser(uid);
-      var authUser = FirebaseUtil.mapRecordToAuthUser(userRecord);
+      UserRecord userRecord = FirebaseAuth.getInstance().getUser(uid);
+      AuthUser authUser = FirebaseUtil.mapRecordToAuthUser(userRecord);
       return Optional.of(authUser);
     } catch (FirebaseAuthException e) {
       System.err.println(e.getMessage());
@@ -70,9 +71,9 @@ public class UserRepository implements UserDao {
 
   @Override
   public List<User> getAllUsersByQuery(String query, int limit) {
-    var searchQuery =
+    Query searchQuery =
         userCollection.whereGreaterThanOrEqualTo(Constants.USER_KEY_USERNAME, query).limit(limit);
-    var querySnapshot = searchQuery.get();
+    ApiFuture<QuerySnapshot> querySnapshot = searchQuery.get();
 
     try {
 
@@ -97,21 +98,17 @@ public class UserRepository implements UserDao {
 
   @Override
   public Optional<Boolean> followUserByUid(String userUid, String userToFollowUid) {
-    if (getUserByUid(userUid).isEmpty()) {
-      throw new UserNotFoundException(userUid);
-    }
+    getUserByUid(userUid).orElseThrow(() -> new UserNotFoundException(userUid));
+    getUserByUid(userToFollowUid).orElseThrow(() -> new UserNotFoundException(userToFollowUid));
 
-    if (getUserByUid(userToFollowUid).isEmpty()) {
-      throw new UserNotFoundException(userToFollowUid);
-    }
-
-    var querySnapshot = userCollection.whereEqualTo(Constants.USER_KEY_UID, userUid).limit(1).get();
+    Query query = userCollection.whereEqualTo(Constants.USER_KEY_UID, userUid).limit(1);
+    ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
     try {
       if (querySnapshot.get().getDocuments().size() > 0) {
 
         // querySnapshot.get() blocks
-        var document = querySnapshot.get().getDocuments().get(0);
+        QueryDocumentSnapshot document = querySnapshot.get().getDocuments().get(0);
 
         if (document.exists()) {
 
@@ -128,7 +125,8 @@ public class UserRepository implements UserDao {
 
           // Set updated list
           userUpdates.put(Constants.USER_KEY_FOLLOWING, follows);
-          var updateFuture = userCollection.document(document.getId()).update(userUpdates);
+          ApiFuture<WriteResult> updateFuture =
+              userCollection.document(document.getId()).update(userUpdates);
 
           updateFuture.get();
           addUserToFollowerList(userToFollowUid, userUid);
@@ -152,11 +150,11 @@ public class UserRepository implements UserDao {
       throws UserNotUpdatedException {
 
     // check if both uids exist
-    final var user = getUserByUid(uid).orElseThrow(() -> new UserNotFoundException(uid));
-    final var userFollower =
+    User user = getUserByUid(uid).orElseThrow(() -> new UserNotFoundException(uid));
+    User userFollower =
         getUserByUid(followerUid).orElseThrow(() -> new UserNotFoundException(followerUid));
 
-    final var userFollowers = user.getFollowers();
+    List<String> userFollowers = user.getFollowers();
 
     userFollowers.add(followerUid);
     user.setFollowers(userFollowers.stream().distinct().collect(Collectors.toList()));
@@ -167,12 +165,10 @@ public class UserRepository implements UserDao {
 
   @Override
   public Optional<Boolean> addUserToDatabase(User userToInsert) {
-    final var uid = userToInsert.getUid();
+    String uid = userToInsert.getUid();
 
     // only add users that are registered with valid uid
-    if (getAuthUserByUid(uid).isEmpty()) {
-      throw new AuthUserNotFoundException(uid);
-    }
+    getAuthUserByUid(uid).orElseThrow(() -> new AuthUserNotFoundException(uid));
 
     // do not add multiple users with same uid
     try {
@@ -182,9 +178,7 @@ public class UserRepository implements UserDao {
       // ok
     }
 
-    System.err.println(userToInsert + "bla bla");
-    // userCollection.add(userToInsert);
-    var addFuture = userCollection.add(userToInsert);
+    ApiFuture<DocumentReference> addFuture = userCollection.add(userToInsert);
 
     try {
       addFuture.get();
@@ -197,14 +191,14 @@ public class UserRepository implements UserDao {
 
   @Override
   public Optional<User> getUserByUid(String uid) {
-    var query = userCollection.whereEqualTo(Constants.USER_KEY_UID, uid).limit(1);
-    var querySnapshot = query.get();
+    Query query = userCollection.whereEqualTo(Constants.USER_KEY_UID, uid).limit(1);
+    ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
     try {
 
       // querySnapshot.get() blocks
       if (querySnapshot.get().getDocuments().size() > 0) {
-        var document = querySnapshot.get().getDocuments().get(0);
+        QueryDocumentSnapshot document = querySnapshot.get().getDocuments().get(0);
 
         if (document.exists()) {
           return Optional.of(FirebaseUtil.mapDocumentToUser(document));
@@ -221,27 +215,22 @@ public class UserRepository implements UserDao {
   public Optional<Boolean> updateUser(User updatedUser) {
     System.err.println(updatedUser);
 
-    var userToUpdateBackUp = getUserByUid(updatedUser.getUid());
-
-    if (userToUpdateBackUp.isEmpty()) {
-      throw new UserNotFoundException(updatedUser.getUid());
-    }
+    User userToUpdateBackUp =
+        getUserByUid(updatedUser.getUid())
+            .orElseThrow(() -> new UserNotFoundException(updatedUser.getUid()));
 
     // Delete and re-add updated user.
     // maybe a bit slower but more consistent
     // and less error prone as attributes may change.
-    var deleteResult = deleteUserByUid(updatedUser.getUid());
-    var addResult = addUserToDatabase(updatedUser);
-
-    var deleted = deleteResult.isPresent();
-    var added = addResult.isPresent();
+    boolean deleted = deleteUserByUid(updatedUser.getUid()).orElse(false);
+    boolean added = addUserToDatabase(updatedUser).orElse(false);
 
     if (deleted) {
       if (added) {
         return Optional.of(true);
       } else {
         // re-add user
-        addUserToDatabase(userToUpdateBackUp.get());
+        addUserToDatabase(userToUpdateBackUp);
       }
     }
 
@@ -264,15 +253,15 @@ public class UserRepository implements UserDao {
 
   @Override
   public Optional<Boolean> deleteUserByUid(String uid) {
-    var query = userCollection.whereEqualTo(Constants.USER_KEY_UID, uid).limit(1);
-    var querySnapshot = query.get();
+    Query query = userCollection.whereEqualTo(Constants.USER_KEY_UID, uid).limit(1);
+    ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
     if (getUserByUid(uid).isPresent()) {
       try {
 
         // querySnapshot.get() blocks
         if (querySnapshot.get().getDocuments().size() > 0) {
-          var documentToDeleteId = querySnapshot.get().getDocuments().get(0).getId();
+          String documentToDeleteId = querySnapshot.get().getDocuments().get(0).getId();
           userCollection.document(documentToDeleteId).delete();
           return Optional.of(true);
         }
@@ -287,11 +276,11 @@ public class UserRepository implements UserDao {
   @Override
   public List<User> getAllUsers() {
     // asynchronously retrieve multiple documents
-    var future = userCollection.get();
+    ApiFuture<QuerySnapshot> future = userCollection.get();
 
     try {
       // future.get() blocks on response
-      var documents = future.get().getDocuments();
+      List<QueryDocumentSnapshot> documents = future.get().getDocuments();
 
       return documents.stream()
           .map(document -> document.toObject(User.class))
@@ -306,26 +295,20 @@ public class UserRepository implements UserDao {
 
   @Override
   public List<User> getFollowingByUserUid(String userUid) {
-    var user = getUserByUid(userUid);
+    User user = getUserByUid(userUid).orElseThrow(() -> new UserNotFoundException(userUid));
 
-    if (user.isPresent()) {
-      var followsList = user.get().getFollowing();
-
-      return followsList.stream()
-          .map(
-              uid -> {
-                try {
-                  return getUserByUid(uid);
-                } catch (Exception e) {
-                  return null;
-                }
-              })
-          .filter(Objects::nonNull)
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .collect(Collectors.toList());
-    }
-
-    throw new UserNotFoundException(userUid);
+    return user.getFollowing().stream()
+        .map(
+            uid -> {
+              try {
+                return getUserByUid(uid);
+              } catch (Exception e) {
+                return null;
+              }
+            })
+        .filter(Objects::nonNull)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(Collectors.toList());
   }
 }

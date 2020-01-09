@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele, Benjamin Will
+ * Copyright 2020 - André Thiele
  *
  * Fachbereich Informatik und Medien
  * Technische Hochschule Brandenburg
@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 public class DateUtils {
   public static ZonedDateTime convertStringToDate(String timestamp) {
     try {
-      var date =
+      String date =
           ZonedDateTime.parse(timestamp)
               .truncatedTo(ChronoUnit.MILLIS)
               .format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
