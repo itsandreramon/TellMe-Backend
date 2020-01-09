@@ -150,22 +150,18 @@ public class UserRepository implements UserDao {
 
   private Optional<Boolean> addUserToFollowerList(String uid, String followerUid)
       throws UserNotUpdatedException {
-    final var optionalUser = getUserByUid(uid);
-    final var optionalFollower = getUserByUid(followerUid);
 
-    if (optionalUser.isEmpty()) {
-      throw new UserNotFoundException(uid);
-    }
+    // check if both uids exist
+    final var user = getUserByUid(uid).orElseThrow(() -> new UserNotFoundException(uid));
+    final var userFollower = getUserByUid(followerUid).orElseThrow(() -> new UserNotFoundException(followerUid));
 
-    if (optionalFollower.isEmpty()) {
-      throw new UserNotFoundException(followerUid);
-    }
-
-    final var user = optionalUser.get();
     final var userFollowers = user.getFollowers();
 
     userFollowers.add(followerUid);
-    user.setFollowers(userFollowers.stream().distinct().collect(Collectors.toList()));
+    user.setFollowers(userFollowers.stream()
+            .distinct()
+            .collect(Collectors.toList())
+    );
 
     updateUser(user);
     return Optional.of(true);
