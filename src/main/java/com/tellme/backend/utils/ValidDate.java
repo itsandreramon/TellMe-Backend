@@ -16,7 +16,7 @@ import javax.validation.Payload;
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface ValidDate {
-  String message() default "Invalid phone number";
+  String message() default "Invalid date format";
 
   Class<?>[] groups() default {};
 
