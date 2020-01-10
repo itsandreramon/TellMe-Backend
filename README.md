@@ -24,12 +24,6 @@ $ heroku local web
 ```
 *Please make sure to built the project using Java 8 in order to acces the JAXB APIs. The JAXB APIs are considered Java EE APIs and were removed in Java 11.*
 
-### Deploy via Heroku
-```
-$ ./gradlew bootJar
-$ heroku deploy:jar build/libs/backend-0.1.jar --app tellme-backend
-```
-
 ### Accessing the Heroku Deployment
 The Heroku deployment can be accessed via the following URL:
 ```
