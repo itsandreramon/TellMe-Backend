@@ -106,9 +106,7 @@
                 <configuration>
                     <appName>tellme-backend</appName>
                     <processTypes>
-                        <web>java -Dserver.port=$PORT $JAVA_OPTS -cp target/classes:target/dependency/*
-                            com.tellme.backend.Application
-                        </web>
+                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* com.tellme.backend.Application</web>
                     </processTypes>
                 </configuration>
             </plugin>
