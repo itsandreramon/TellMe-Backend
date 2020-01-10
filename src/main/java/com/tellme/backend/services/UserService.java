@@ -43,8 +43,8 @@ public class UserService {
     return userRepository.getUserByUsername(username);
   }
 
-  public Optional<Boolean> followUserByUid(String userUid, String userToFollowUid) {
-    return userRepository.followUserByUid(userUid, userToFollowUid);
+  public Optional<Boolean> followUserByUid(String uid, String userToFollowUid) {
+    return userRepository.followUserByUid(uid, userToFollowUid);
   }
 
   public Optional<Boolean> updateUser(User updatedUser) {
@@ -61,9 +61,5 @@ public class UserService {
 
   public List<User> getFollowingByUserUid(String userUid) {
     return userRepository.getFollowingByUserUid(userUid);
-  }
-
-  public Optional<Boolean> followUserByUID(String uid, String uidToFollow) {
-    return userRepository.followUserByUid(uid, uidToFollow);
   }
 }

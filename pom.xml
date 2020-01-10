@@ -76,7 +76,25 @@
     </dependencyManagement>
 
     <build>
+        <finalName>tellme-backend-uber-jar</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <!-- put your configurations here -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -89,7 +107,10 @@
                 <configuration>
                     <appName>tellme-backend</appName>
                     <processTypes>
-                        <web>java -Dserver.port=$PORT $JAVA_OPTS -cp target/classes:target/dependency/* com.tellme.backend.Application</web>
+                        <!-- <web>java -Dserver.port=$PORT $JAVA_OPTS -cp target/classes:target/dependency/*
+                            com.tellme.backend.Application
+                        </web> -->
+                        <web>java -jar target/tellme-backend-uber-jar.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>

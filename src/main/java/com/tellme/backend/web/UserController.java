@@ -33,18 +33,10 @@ public class UserController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  @DeleteMapping("/users/uid/{uid}")
-  public ResponseEntity<Boolean> deleteUserByUid(@PathVariable("uid") String uid) {
+  @DeleteMapping("/users")
+  public ResponseEntity<Boolean> deleteUserByUid(@RequestParam("uid") String uid) {
     return userService
         .deleteUserByUid(uid)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
-  }
-
-  @PostMapping("/users")
-  public ResponseEntity<Boolean> addToDatabase(@Valid @RequestBody User user) {
-    return userService
-        .addToDatabase(user)
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
@@ -94,7 +86,7 @@ public class UserController {
   public ResponseEntity<Boolean> followUserByUID(
       @PathVariable("uid") String uid, @PathVariable("uidToFollow") String uidToFollow) {
     return userService
-        .followUserByUID(uid, uidToFollow)
+        .followUserByUid(uid, uidToFollow)
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
