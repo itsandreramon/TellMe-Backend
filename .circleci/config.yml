@@ -39,9 +39,9 @@ jobs:
       - restore_cache:
           key: tellme-backend-{{ checksum "pom.xml" }}
       - run: ./mvnw dependency:go-offline
+      - run: ./mvnw spotless:check
+      - run: ./mvnw package
       - save_cache:
           paths:
             - ~/.m2
           key: tellme-backend-{{ checksum "pom.xml" }}
-      - run: ./mvnw spotless:check
-      - run: ./mvnw package
