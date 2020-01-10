@@ -76,7 +76,6 @@
     </dependencyManagement>
 
     <build>
-        <finalName>tellme-backend-uber-jar</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -107,10 +106,9 @@
                 <configuration>
                     <appName>tellme-backend</appName>
                     <processTypes>
-                        <!-- <web>java -Dserver.port=$PORT $JAVA_OPTS -cp target/classes:target/dependency/*
+                        <web>java -Dserver.port=$PORT $JAVA_OPTS -cp target/classes:target/dependency/*
                             com.tellme.backend.Application
-                        </web> -->
-                        <web>java -jar target/tellme-backend-uber-jar.jar</web>
+                        </web>
                     </processTypes>
                 </configuration>
             </plugin>
