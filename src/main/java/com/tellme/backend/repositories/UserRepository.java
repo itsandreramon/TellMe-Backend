@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
-import com.tellme.backend.exceptions.*;
 import com.tellme.backend.model.AuthUser;
 import com.tellme.backend.model.User;
 import com.tellme.backend.utils.Constants;
@@ -21,9 +20,13 @@ import com.tellme.backend.utils.FirebaseUtil;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Qualifier("FirestoreRepository")
 public class UserRepository implements UserDao {
 
   private final CollectionReference userCollection;
@@ -53,7 +56,7 @@ public class UserRepository implements UserDao {
       e.printStackTrace();
     }
 
-    throw new UserNotFoundException(username);
+    throw new ResourceNotFoundException(username);
   }
 
   @Override
@@ -66,7 +69,7 @@ public class UserRepository implements UserDao {
       System.err.println(e.getMessage());
     }
 
-    throw new AuthUserNotFoundException(uid);
+    throw new ResourceNotFoundException(uid);
   }
 
   @Override
@@ -93,13 +96,13 @@ public class UserRepository implements UserDao {
       e.printStackTrace();
     }
 
-    throw new UserListNotFoundException();
+    throw new ResourceNotFoundException();
   }
 
   @Override
   public Optional<Boolean> followUserByUid(String userUid, String userToFollowUid) {
-    getUserByUid(userUid).orElseThrow(() -> new UserNotFoundException(userUid));
-    getUserByUid(userToFollowUid).orElseThrow(() -> new UserNotFoundException(userToFollowUid));
+    getUserByUid(userUid).orElseThrow(() -> new ResourceNotFoundException(userUid));
+    getUserByUid(userToFollowUid).orElseThrow(() -> new ResourceNotFoundException(userToFollowUid));
 
     Query query = userCollection.whereEqualTo(Constants.USER_KEY_UID, userUid).limit(1);
     ApiFuture<QuerySnapshot> querySnapshot = query.get();
@@ -134,25 +137,25 @@ public class UserRepository implements UserDao {
           return Optional.of(true);
         } else {
           // double check since the data could have changed already
-          throw new UserNotFoundException(userUid);
+          throw new ResourceNotFoundException(userUid);
         }
       } else {
-        throw new UserNotFoundException(userUid);
+        throw new ResourceNotFoundException(userUid);
       }
     } catch (ExecutionException | InterruptedException e) {
       e.printStackTrace();
     }
 
-    throw new UserNotFollowedException(userToFollowUid);
+    throw new IllegalStateException(userToFollowUid);
   }
 
   private Optional<Boolean> addUserToFollowerList(String uid, String followerUid)
-      throws UserNotUpdatedException {
+      throws IllegalStateException {
 
     // check if both uids exist
-    User user = getUserByUid(uid).orElseThrow(() -> new UserNotFoundException(uid));
+    User user = getUserByUid(uid).orElseThrow(() -> new ResourceNotFoundException(uid));
     User userFollower =
-        getUserByUid(followerUid).orElseThrow(() -> new UserNotFoundException(followerUid));
+        getUserByUid(followerUid).orElseThrow(() -> new ResourceNotFoundException(followerUid));
 
     List<String> userFollowers = user.getFollowers();
 
@@ -168,13 +171,13 @@ public class UserRepository implements UserDao {
     String uid = userToInsert.getUid();
 
     // only add users that are registered with valid uid
-    getAuthUserByUid(uid).orElseThrow(() -> new AuthUserNotFoundException(uid));
+    getAuthUserByUid(uid).orElseThrow(() -> new ResourceNotFoundException(uid));
 
     // do not add multiple users with same uid
     try {
       getUserByUid(uid);
-      throw new UserAlreadyExistsException(uid);
-    } catch (UserNotFoundException e) {
+      throw new IllegalStateException(uid);
+    } catch (ResourceNotFoundException e) {
       // ok
     }
 
@@ -185,7 +188,7 @@ public class UserRepository implements UserDao {
       return Optional.of(true);
     } catch (ExecutionException | InterruptedException e) {
       e.printStackTrace();
-      throw new UserNotAddedException(uid);
+      throw new IllegalStateException(uid);
     }
   }
 
@@ -208,7 +211,7 @@ public class UserRepository implements UserDao {
       e.printStackTrace();
     }
 
-    throw new UserNotFoundException(uid);
+    throw new ResourceNotFoundException(uid);
   }
 
   @Override
@@ -217,7 +220,7 @@ public class UserRepository implements UserDao {
 
     User userToUpdateBackUp =
         getUserByUid(updatedUser.getUid())
-            .orElseThrow(() -> new UserNotFoundException(updatedUser.getUid()));
+            .orElseThrow(() -> new ResourceNotFoundException(updatedUser.getUid()));
 
     // Delete and re-add updated user.
     // maybe a bit slower but more consistent
@@ -234,7 +237,7 @@ public class UserRepository implements UserDao {
       }
     }
 
-    throw new UserNotUpdatedException(updatedUser.getUid());
+    throw new IllegalStateException(updatedUser.getUid());
   }
 
   @Override
@@ -248,7 +251,7 @@ public class UserRepository implements UserDao {
       }
     }
 
-    throw new AuthUserNotFoundException(uid);
+    throw new ResourceNotFoundException(uid);
   }
 
   @Override
@@ -270,7 +273,7 @@ public class UserRepository implements UserDao {
       }
     }
 
-    throw new UserNotDeletedException(uid);
+    throw new IllegalStateException(uid);
   }
 
   @Override
@@ -290,12 +293,12 @@ public class UserRepository implements UserDao {
       e.printStackTrace();
     }
 
-    throw new UserListNotFoundException();
+    throw new ResourceNotFoundException();
   }
 
   @Override
   public List<User> getFollowingByUserUid(String userUid) {
-    User user = getUserByUid(userUid).orElseThrow(() -> new UserNotFoundException(userUid));
+    User user = getUserByUid(userUid).orElseThrow(() -> new ResourceNotFoundException(userUid));
 
     return user.getFollowing().stream()
         .map(
