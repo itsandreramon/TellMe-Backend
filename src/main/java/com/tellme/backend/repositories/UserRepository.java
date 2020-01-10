@@ -20,7 +20,6 @@ import com.tellme.backend.utils.FirebaseUtil;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Repository;
