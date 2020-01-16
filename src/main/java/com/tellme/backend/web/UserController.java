@@ -12,6 +12,7 @@ import com.tellme.backend.model.User;
 import com.tellme.backend.services.UserService;
 import java.util.List;
 import javax.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,5 +90,13 @@ public class UserController {
         .followUserByUid(uid, uidToFollow)
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @PostMapping("/users")
+  public ResponseEntity<Boolean> addUserToDatabase(@Valid @RequestBody User user) {
+    return userService
+        .addToDatabase(user)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
   }
 }
