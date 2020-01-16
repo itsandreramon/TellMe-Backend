@@ -34,4 +34,6 @@ public interface UserDao {
   Optional<Boolean> deleteAuthUserByUid(String uid);
 
   List<User> getFollowingByUserUid(String userUid);
+
+  Optional<Boolean> unfollowUserByUid(String uid, String uidToUnfollow);
 }

@@ -148,6 +148,56 @@ public class UserRepository implements UserDao {
     throw new IllegalStateException(userToFollowUid);
   }
 
+  @Override
+  public Optional<Boolean> unfollowUserByUid(String uid, String uidToUnfollow) {
+    getUserByUid(uid).orElseThrow(() -> new ResourceNotFoundException(uid));
+    getUserByUid(uidToUnfollow).orElseThrow(() -> new ResourceNotFoundException(uidToUnfollow));
+
+    Query query = userCollection.whereEqualTo(Constants.USER_KEY_UID, uid).limit(1);
+    ApiFuture<QuerySnapshot> querySnapshot = query.get();
+
+    try {
+      if (querySnapshot.get().getDocuments().size() > 0) {
+
+        // querySnapshot.get() blocks
+        QueryDocumentSnapshot document = querySnapshot.get().getDocuments().get(0);
+
+        if (document.exists()) {
+
+          // Retrieve current user
+          User userObject = document.toObject(User.class);
+          Map<String, Object> userUpdates = new HashMap<>();
+
+          // Add userToFollowUid to following list
+          List<String> following = userObject.getFollowing();
+          if (following == null) following = new ArrayList<>();
+          following.remove(uidToUnfollow);
+
+          // Set updated list
+          userUpdates.put(
+              Constants.USER_KEY_FOLLOWING,
+              following.stream().distinct().collect(Collectors.toList()));
+          ApiFuture<WriteResult> updateFuture =
+              userCollection.document(document.getId()).update(userUpdates);
+
+          updateFuture.get();
+          removeUserFromFollowerList(uidToUnfollow, uid);
+
+          return Optional.of(true);
+        } else {
+          // double check since the data could have changed already
+          throw new ResourceNotFoundException(uid);
+        }
+      } else {
+        throw new ResourceNotFoundException(uid);
+      }
+    } catch (ExecutionException | InterruptedException e) {
+      e.printStackTrace();
+    }
+
+    throw new IllegalStateException(uidToUnfollow);
+  }
+
   private Optional<Boolean> addUserToFollowerList(String uid, String followerUid)
       throws IllegalStateException {
 
@@ -159,6 +209,23 @@ public class UserRepository implements UserDao {
     List<String> userFollowers = user.getFollowers();
 
     userFollowers.add(followerUid);
+    user.setFollowers(userFollowers.stream().distinct().collect(Collectors.toList()));
+
+    updateUser(user);
+    return Optional.of(true);
+  }
+
+  private Optional<Boolean> removeUserFromFollowerList(String uid, String followerUid)
+      throws IllegalStateException {
+
+    // check if both uids exist
+    User user = getUserByUid(uid).orElseThrow(() -> new ResourceNotFoundException(uid));
+    User userFollower =
+        getUserByUid(followerUid).orElseThrow(() -> new ResourceNotFoundException(followerUid));
+
+    List<String> userFollowers = user.getFollowers();
+
+    userFollowers.remove(followerUid);
     user.setFollowers(userFollowers.stream().distinct().collect(Collectors.toList()));
 
     updateUser(user);
