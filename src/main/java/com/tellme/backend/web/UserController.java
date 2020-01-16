@@ -33,8 +33,8 @@ public class UserController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  @DeleteMapping("/users")
-  public ResponseEntity<Boolean> deleteUserByUid(@RequestParam("uid") String uid) {
+  @DeleteMapping("/users/uid/{uid}")
+  public ResponseEntity<Boolean> deleteUserByUid(@PathVariable("uid") String uid) {
     return userService
         .deleteUserByUid(uid)
         .map(ResponseEntity::ok)
