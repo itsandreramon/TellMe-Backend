@@ -92,11 +92,11 @@ public class UserController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  @PostMapping("/users/{uid}/unfollow/{uidToFollow}")
+  @PostMapping("/users/{uid}/unfollow/{uidToUnfollow}")
   public ResponseEntity<Boolean> unfollowUserByUID(
-      @PathVariable("uid") String uid, @PathVariable("uidToUnfollow") String uidToFollow) {
+      @PathVariable("uid") String uid, @PathVariable("uidToUnfollow") String uidToUnfollow) {
     return userService
-        .unfollowUserByUid(uid, uidToFollow)
+        .unfollowUserByUid(uid, uidToUnfollow)
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
