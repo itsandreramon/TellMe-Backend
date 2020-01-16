@@ -83,24 +83,6 @@ public class UserController {
     return userService.getFollowingByUserUid(userUid);
   }
 
-  @PostMapping("/users/{uid}/follow/{uidToFollow}")
-  public ResponseEntity<Boolean> followUserByUID(
-      @PathVariable("uid") String uid, @PathVariable("uidToFollow") String uidToFollow) {
-    return userService
-        .followUserByUid(uid, uidToFollow)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
-  }
-
-  @PostMapping("/users/{uid}/unfollow/{uidToUnfollow}")
-  public ResponseEntity<Boolean> unfollowUserByUID(
-      @PathVariable("uid") String uid, @PathVariable("uidToUnfollow") String uidToUnfollow) {
-    return userService
-        .unfollowUserByUid(uid, uidToUnfollow)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
-  }
-
   @PostMapping("/users")
   public ResponseEntity<Boolean> addUserToDatabase(@Valid @RequestBody User user) {
     return userService
