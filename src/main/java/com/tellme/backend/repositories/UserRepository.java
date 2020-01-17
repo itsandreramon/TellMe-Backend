@@ -282,28 +282,17 @@ public class UserRepository implements UserDao {
 
   @Override
   public Optional<Boolean> updateUser(User updatedUser) {
-    System.err.println(updatedUser);
+    try {
+      DocumentReference docRef = userCollection.document(updatedUser.getUid());
+      ApiFuture<WriteResult> future = docRef.set(updatedUser);
 
-    User userToUpdateBackUp =
-        getUserByUid(updatedUser.getUid())
-            .orElseThrow(() -> new ResourceNotFoundException(updatedUser.getUid()));
-
-    // Delete and re-add updated user.
-    // maybe a bit slower but more consistent
-    // and less error prone as attributes may change.
-    boolean deleted = deleteUserByUid(updatedUser.getUid()).orElse(false);
-    boolean added = addUserToDatabase(updatedUser).orElse(false);
-
-    if (deleted) {
-      if (added) {
-        return Optional.of(true);
-      } else {
-        // re-add user
-        addUserToDatabase(userToUpdateBackUp);
-      }
+      future.get();
+      return Optional.of(true);
+    } catch (ExecutionException | InterruptedException e) {
+      e.printStackTrace();
     }
 
-    throw new IllegalStateException(updatedUser.getUid());
+    throw new IllegalStateException();
   }
 
   @Override
