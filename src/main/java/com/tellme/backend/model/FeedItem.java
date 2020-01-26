@@ -1,48 +1,23 @@
-/*
- * Copyright 2020 - André Thiele
- *
- * Fachbereich Informatik und Medien
- * Technische Hochschule Brandenburg
- */
-
 package com.tellme.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tellme.backend.utils.Constants;
-import com.tellme.backend.utils.ValidDate;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Document
+@Data
 @Builder
+@AllArgsConstructor
+@ToString
 public class FeedItem {
 
-  @NotBlank
-  @JsonProperty(Constants.FEED_ITEM_KEY_ID)
-  private String id;
-
-  @NotBlank
-  @JsonProperty(Constants.FEED_ITEM_KEY_RECEIVER_AVATAR)
-  private String receiverAvatar;
-
-  @NotBlank
-  @JsonProperty(Constants.FEED_ITEM_KEY_RECEIVER_USERNAME)
-  private String receiverUsername;
-
-  @NotBlank
-  @JsonProperty(Constants.FEED_ITEM_KEY_QUESTION)
-  private String question;
-
-  @NotNull
-  @JsonProperty(Constants.FEED_ITEM_KEY_REPLY)
-  private String reply;
-
-  @NotNull
-  @ValidDate
-  @JsonProperty(Constants.FEED_ITEM_KEY_REPLY_DATE)
-  private String replyDate;
+    @Id private final String id;
+    private final String receiverAvatar;
+    private final String receiverUsername;
+    private final String question;
+    private final String reply;
+    private final String replyDate;
 }

@@ -1,51 +1,25 @@
-/*
- * Copyright 2020 - André Thiele
- *
- * Fachbereich Informatik und Medien
- * Technische Hochschule Brandenburg
- */
-
 package com.tellme.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tellme.backend.utils.Constants;
-import java.util.List;
-import javax.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import java.util.List;
+
+@Document
+@Data
 @AllArgsConstructor
-@Builder
 @ToString
 public class User {
 
-  @NotBlank
-  @JsonProperty(Constants.USER_KEY_UID)
-  String uid;
-
-  @NotBlank
-  @JsonProperty(Constants.USER_KEY_NAME)
-  String name;
-
-  @NotBlank
-  @JsonProperty(Constants.USER_KEY_USERNAME)
-  String username;
-
-  @NotBlank
-  @JsonProperty(Constants.USER_KEY_EMAIL)
-  String email;
-
-  @JsonProperty(Constants.USER_KEY_AVATAR)
-  String avatar;
-
-  @JsonProperty(Constants.USER_KEY_ABOUT)
-  String about;
-
-  @JsonProperty(Constants.USER_KEY_FOLLOWING)
-  List<String> following;
-
-  @JsonProperty(Constants.USER_KEY_FOLLOWERS)
-  List<String> followers;
+    @Id private String uid;
+    private final String name;
+    private final String username;
+    private final String email;
+    private final String avatar;
+    private final String about;
+    private final List<String> following;
+    private final List<String> followers;
 }

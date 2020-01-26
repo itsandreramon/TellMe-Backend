@@ -1,76 +1,24 @@
-/*
- * Copyright 2020 - André Thiele
- *
- * Fachbereich Informatik und Medien
- * Technische Hochschule Brandenburg
- */
-
 package com.tellme.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tellme.backend.utils.Constants;
-import com.tellme.backend.utils.ValidDate;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import java.util.List;
+
+@Document
+@Data
 @AllArgsConstructor
-@Builder
+@ToString
 public class Tell {
 
-  private String id;
-
-  @NotBlank
-  @JsonProperty(Constants.TELL_KEY_SENDER_UID)
-  private String senderUid;
-
-  @NotBlank
-  @JsonProperty(Constants.TELL_KEY_RECEIVER_UID)
-  private String receiverUid;
-
-  @NotBlank
-  @JsonProperty(Constants.TELL_KEY_QUESTION)
-  private String question;
-
-  @JsonProperty(Constants.TELL_KEY_REPLY)
-  private String reply;
-
-  @NotNull
-  @ValidDate
-  @JsonProperty(Constants.TELL_KEY_SEND_DATE)
-  private String sendDate;
-
-  @JsonProperty(Constants.TELL_KEY_REPLY_DATE)
-  @ValidDate
-  private String replyDate;
-
-  @Override
-  public String toString() {
-    return "Tell{"
-        + "id='"
-        + id
-        + '\''
-        + ", senderUid='"
-        + senderUid
-        + '\''
-        + ", receiverUid='"
-        + receiverUid
-        + '\''
-        + ", question='"
-        + question
-        + '\''
-        + ", reply='"
-        + reply
-        + '\''
-        + ", sendDate='"
-        + sendDate
-        + '\''
-        + ", replyDate='"
-        + replyDate
-        + '\''
-        + '}';
-  }
+    @Id private final String id;
+    private final String senderUid;
+    private final String receiverUid;
+    private final String question;
+    private final String reply;
+    private final String sendDate;
+    private final String replyDate;
 }
