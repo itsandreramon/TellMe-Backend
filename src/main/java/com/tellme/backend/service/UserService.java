@@ -24,7 +24,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Flux<User> getAll() {
+    public Flux<User> findAll() {
         return userRepository.findAll();
     }
 

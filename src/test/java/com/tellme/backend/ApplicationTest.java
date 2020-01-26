@@ -7,6 +7,7 @@
 
 package com.tellme.backend;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,5 +28,14 @@ public class ApplicationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class).isEqualTo("Running...");
+    }
+
+    @Nested
+    class UserTest {
+
+        @Test
+        public void testGetUserById() {
+
+        }
     }
 }

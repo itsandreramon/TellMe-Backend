@@ -7,7 +7,7 @@
 
 package com.tellme.backend.router;
 
-import com.tellme.backend.handler.UserHandler;
+import com.tellme.backend.handler.TellHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -15,14 +15,13 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
-public class UserRouter {
+public class TellRouter {
 
     @Bean
-    RouterFunction<ServerResponse> userRoutes(UserHandler handler) {
+    RouterFunction<ServerResponse> tellRoutes(TellHandler handler) {
         return RouterFunctions.route()
-                .GET("/users", handler::getAll)
-                .GET("/users/{id}", handler::getById)
-                .GET("/users/{id}/feed", handler::getFeedById)
+                .POST("/tells", handler::insert)
+                .GET("/tells", handler::getAll)
                 .build();
     }
 }

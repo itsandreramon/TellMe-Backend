@@ -7,7 +7,9 @@
 
 package com.tellme.backend.handler;
 
+import com.tellme.backend.model.FeedItem;
 import com.tellme.backend.model.User;
+import com.tellme.backend.service.FeedService;
 import com.tellme.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -21,12 +23,13 @@ import reactor.core.publisher.Mono;
 public class UserHandler {
 
     private final UserService userService;
+    private final FeedService feedService;
 
     public Mono<ServerResponse> getAll(ServerRequest request) {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(userService.getAll(), User.class);
+                .body(userService.findAll(), User.class);
     }
 
     public Mono<ServerResponse> getById(ServerRequest request) {
@@ -36,5 +39,14 @@ public class UserHandler {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userService.findById(id), User.class);
+    }
+
+    public Mono<ServerResponse> getFeedById(ServerRequest request) {
+        String id = request.pathVariable("id");
+
+        return ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_STREAM_JSON)
+                .body(feedService.getFeedByUser(id), FeedItem.class);
     }
 }
