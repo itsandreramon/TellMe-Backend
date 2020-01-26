@@ -7,8 +7,6 @@
 
 package com.tellme.backend.handler;
 
-import com.tellme.backend.model.User;
-import com.tellme.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

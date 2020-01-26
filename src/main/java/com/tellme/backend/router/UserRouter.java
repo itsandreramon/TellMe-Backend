@@ -1,3 +1,10 @@
+/*
+ * Copyright 2020 - André Ramon Thiele
+ *
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
+ */
+
 package com.tellme.backend.router;
 
 import com.tellme.backend.handler.UserHandler;
