@@ -1,3 +1,10 @@
+/*
+ * Copyright 2020 - André Ramon Thiele
+ *
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
+ */
+
 package com.tellme.backend.model;
 
 import lombok.AllArgsConstructor;
@@ -6,7 +13,6 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
 
 @Document
 @Data
