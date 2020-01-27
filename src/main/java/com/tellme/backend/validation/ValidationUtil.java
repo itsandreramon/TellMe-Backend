@@ -7,6 +7,7 @@
 
 package com.tellme.backend.validation;
 
+import com.tellme.backend.model.Tell;
 import com.tellme.backend.model.User;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -19,6 +20,15 @@ public class ValidationUtil {
         Validator validator = factory.getValidator();
 
         if (!validator.validate(user).isEmpty()) {
+            throw new IllegalStateException();
+        }
+    }
+
+    public static void validate(Tell tell) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        if (!validator.validate(tell).isEmpty()) {
             throw new IllegalStateException();
         }
     }

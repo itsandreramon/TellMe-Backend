@@ -35,4 +35,16 @@ public class TellService {
     public Mono<Void> deleteAll() {
         return tellRepository.deleteAll();
     }
+
+    public Mono<Void> deleteById(String id) {
+        return tellRepository.deleteById(id);
+    }
+
+    public Flux<Tell> findByReceiverUid(String receiverUid) {
+        return tellRepository.findByReceiverUid(receiverUid);
+    }
+
+    public Flux<Tell> findBySenderUid(String senderUid) {
+        return tellRepository.findByReceiverUid(senderUid);
+    }
 }

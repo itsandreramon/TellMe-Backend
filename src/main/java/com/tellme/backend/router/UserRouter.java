@@ -18,18 +18,22 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class UserRouter {
 
     @Bean
-    RouterFunction<ServerResponse> userRoutes(UserHandler handler) {
+    RouterFunction<ServerResponse> routes(UserHandler handler) {
         return RouterFunctions.route()
-                .GET("/users", handler::findAll)
-                .GET("/users/uid/{uid}", handler::findById)
-                .GET("/users/username/{username}", handler::findByUsername)
-                .GET("/users/search/{query}", handler::findByUsernameLike)
-                .GET("/users/{uid}/feed", handler::getFeedByUserId)
-                .GET("/users/{uid}/inbox", handler::getInboxByUserId)
-                .GET("/users/{uid}/auth", handler::findAuthUserById)
-                .POST("/users", handler::save)
-                .PUT("/users", handler::update)
-                .DELETE("/users/uid/{uid}", handler::deleteById)
+                .path("/api/v2/", b1 -> b1
+                        .path("/users", b2 -> b2
+                                .GET("/", handler::findAll)
+                                .GET("/uid/{uid}", handler::findById)
+                                .GET("/username/{username}", handler::findByUsername)
+                                .GET("/search/{query}", handler::findByUsernameLike)
+                                .GET("/{uid}/feed", handler::getFeedByUserId)
+                                .GET("/{uid}/inbox", handler::getInboxByUserId)
+                                .GET("/{uid}/auth", handler::findAuthUserById)
+                                .POST("/", handler::save)
+                                .PUT("/", handler::update)
+                                .DELETE("/uid/{uid}", handler::deleteById)
+                        )
+                )
                 .build();
     }
 }
