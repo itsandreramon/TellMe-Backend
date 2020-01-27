@@ -22,7 +22,6 @@ $ java -jar build/libs/backend-0.2.jar
 $ ./mvnw package
 $ heroku local web
 ```
-*Please make sure to built the project using Java 8 in order to acces the JAXB APIs. The JAXB APIs are considered Java EE APIs and were removed in Java 11.*
 
 ### Accessing the Heroku Deployment
 The Heroku deployment can be accessed via the following URL:
@@ -37,6 +36,3 @@ $ openssl aes-256-cbc -d -in release/serviceAccountKey.json.encrypted -k $KEY >>
 ```
 
 *Please make sure to place the corresponding ```serviceAccountKey.json``` inside the ```src/main/resources``` folder.*
-
-### Disclaimer
-This project was built for educational purposes and does not represent a production ready application.
