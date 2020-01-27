@@ -1,51 +1,47 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Ramon Thiele
  *
- * Fachbereich Informatik und Medien
- * Technische Hochschule Brandenburg
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
  */
 
 package com.tellme.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tellme.backend.utils.Constants;
-import java.util.List;
-import javax.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
+@Document(collection = "users")
+@Data
 @AllArgsConstructor
-@Builder
 @ToString
 public class User {
 
-  @NotBlank
-  @JsonProperty(Constants.USER_KEY_UID)
-  String uid;
+    @Id
+    @NotBlank
+    private String uid;
 
-  @NotBlank
-  @JsonProperty(Constants.USER_KEY_NAME)
-  String name;
+    @NotBlank
+    private String name;
 
-  @NotBlank
-  @JsonProperty(Constants.USER_KEY_USERNAME)
-  String username;
+    @NotBlank
+    private String username;
 
-  @NotBlank
-  @JsonProperty(Constants.USER_KEY_EMAIL)
-  String email;
+    @NotBlank
+    private String email;
 
-  @JsonProperty(Constants.USER_KEY_AVATAR)
-  String avatar;
+    private String avatar;
 
-  @JsonProperty(Constants.USER_KEY_ABOUT)
-  String about;
+    @NotNull
+    private String about;
 
-  @JsonProperty(Constants.USER_KEY_FOLLOWING)
-  List<String> following;
+    @NotNull
+    private List<String> following;
 
-  @JsonProperty(Constants.USER_KEY_FOLLOWERS)
-  List<String> followers;
+    @NotNull
+    private List<String> followers;
 }

@@ -1,76 +1,48 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Ramon Thiele
  *
- * Fachbereich Informatik und Medien
- * Technische Hochschule Brandenburg
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
  */
 
 package com.tellme.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tellme.backend.utils.Constants;
-import com.tellme.backend.utils.ValidDate;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import lombok.*;
+import com.tellme.backend.validation.ValidDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import javax.validation.constraints.NotBlank;
+
+
+@Document(collection = "tells")
+@Data
 @AllArgsConstructor
-@Builder
+@ToString
+@Builder(toBuilder = true)
 public class Tell {
 
-  private String id;
+    @Id
+    private String id;
 
-  @NotBlank
-  @JsonProperty(Constants.TELL_KEY_SENDER_UID)
-  private String senderUid;
+    @NotBlank
+    private String senderUid;
 
-  @NotBlank
-  @JsonProperty(Constants.TELL_KEY_RECEIVER_UID)
-  private String receiverUid;
+    @NotBlank
+    private String receiverUid;
 
-  @NotBlank
-  @JsonProperty(Constants.TELL_KEY_QUESTION)
-  private String question;
+    @NotBlank
+    private String question;
 
-  @JsonProperty(Constants.TELL_KEY_REPLY)
-  private String reply;
+    private String reply;
 
-  @NotNull
-  @ValidDate
-  @JsonProperty(Constants.TELL_KEY_SEND_DATE)
-  private String sendDate;
+    @ValidDate
+    @NotBlank
+    private String sendDate;
 
-  @JsonProperty(Constants.TELL_KEY_REPLY_DATE)
-  @ValidDate
-  private String replyDate;
-
-  @Override
-  public String toString() {
-    return "Tell{"
-        + "id='"
-        + id
-        + '\''
-        + ", senderUid='"
-        + senderUid
-        + '\''
-        + ", receiverUid='"
-        + receiverUid
-        + '\''
-        + ", question='"
-        + question
-        + '\''
-        + ", reply='"
-        + reply
-        + '\''
-        + ", sendDate='"
-        + sendDate
-        + '\''
-        + ", replyDate='"
-        + replyDate
-        + '\''
-        + '}';
-  }
+    @ValidDate
+    private String replyDate;
 }

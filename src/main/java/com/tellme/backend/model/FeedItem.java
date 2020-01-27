@@ -1,48 +1,43 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Ramon Thiele
  *
- * Fachbereich Informatik und Medien
- * Technische Hochschule Brandenburg
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
  */
 
 package com.tellme.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tellme.backend.utils.Constants;
-import com.tellme.backend.utils.ValidDate;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import lombok.*;
+import com.tellme.backend.validation.ValidDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+import javax.validation.constraints.NotBlank;
+
+@Data
 @Builder
+@AllArgsConstructor
+@ToString
 public class FeedItem {
 
-  @NotBlank
-  @JsonProperty(Constants.FEED_ITEM_KEY_ID)
-  private String id;
+    @Id
+    @NotBlank
+    private String id;
 
-  @NotBlank
-  @JsonProperty(Constants.FEED_ITEM_KEY_RECEIVER_AVATAR)
-  private String receiverAvatar;
+    private String receiverAvatar;
 
-  @NotBlank
-  @JsonProperty(Constants.FEED_ITEM_KEY_RECEIVER_USERNAME)
-  private String receiverUsername;
+    @NotBlank
+    private String receiverUsername;
 
-  @NotBlank
-  @JsonProperty(Constants.FEED_ITEM_KEY_QUESTION)
-  private String question;
+    @NotBlank
+    private String question;
 
-  @NotNull
-  @JsonProperty(Constants.FEED_ITEM_KEY_REPLY)
-  private String reply;
+    @NotBlank
+    private String reply;
 
-  @NotNull
-  @ValidDate
-  @JsonProperty(Constants.FEED_ITEM_KEY_REPLY_DATE)
-  private String replyDate;
+    @ValidDate
+    @NotBlank
+    private String replyDate;
 }

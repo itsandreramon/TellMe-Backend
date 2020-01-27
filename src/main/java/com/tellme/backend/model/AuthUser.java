@@ -1,23 +1,22 @@
 /*
- * Copyright 2020 - André Thiele
+ * Copyright 2020 - André Ramon Thiele
  *
- * Fachbereich Informatik und Medien
- * Technische Hochschule Brandenburg
+ * Department of Computer Science and Media
+ * University of Applied Sciences Brandenburg
  */
 
 package com.tellme.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tellme.backend.utils.Constants;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
 @Builder
+@ToString
 public class AuthUser {
 
-  @JsonProperty(Constants.AUTH_USER_KEY_EMAIL)
-  String email;
+    private String email;
 }
