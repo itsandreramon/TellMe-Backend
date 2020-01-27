@@ -14,7 +14,7 @@ You can start the Spring Boot application in a variety of ways:
 1. Build a .jar from the sources and run it locally via the Java CLI
 ```
 $ ./mvnw package
-$ java -jar build/libs/backend-0.1.jar
+$ java -jar build/libs/backend-0.0.1-SNAPSHOT.jar
 ```
 
 2. Run it locally via the Heroku CLI
@@ -30,8 +30,6 @@ The Heroku deployment can be accessed via the following URL:
 $ curl https://tellme-backend.herokuapp.com/ -H "Authorization: Bearer $TOKEN"
 ```
 
-### Code style
-This project uses [google-java-format](https://github.com/google/google-java-format) via [Spotless](https://github.com/diffplug/spotless) to format code based on the official [Google Java Style](https://google.github.io/styleguide/javaguide.html).
 ### API
 You can obtain a valid api key by decrypting the file using:
 ```
