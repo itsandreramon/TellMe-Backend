@@ -28,7 +28,6 @@ public class FirebaseRepository {
                     .map(FirebaseUtil::mapRecordToAuthUser);
 
         } catch (FirebaseAuthException e) {
-            e.printStackTrace();
             return Mono.empty();
         }
     }

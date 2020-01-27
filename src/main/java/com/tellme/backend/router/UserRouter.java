@@ -24,10 +24,12 @@ public class UserRouter {
                 .GET("/users/uid/{uid}", handler::findById)
                 .GET("/users/username/{username}", handler::findByUsername)
                 .GET("/users/search/{query}", handler::findByUsernameLike)
-                .GET("/users/{id}/feed", handler::getFeedByUserId)
-                .GET("/users/{id}/inbox", handler::getInboxByUserId)
-                .GET("/users/{id}/auth", handler::findAuthUserById)
+                .GET("/users/{uid}/feed", handler::getFeedByUserId)
+                .GET("/users/{uid}/inbox", handler::getInboxByUserId)
+                .GET("/users/{uid}/auth", handler::findAuthUserById)
                 .POST("/users", handler::save)
+                .PUT("/users", handler::update)
+                .DELETE("/users/uid/{uid}", handler::deleteById)
                 .build();
     }
 }

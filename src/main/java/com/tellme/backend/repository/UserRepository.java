@@ -14,7 +14,19 @@ import reactor.core.publisher.Mono;
 
 public interface UserRepository extends ReactiveCrudRepository<User, String> {
 
+    /**
+     * Returns a {@link User} that matches a given username.
+     *
+     * @param username
+     * @return
+     */
     Mono<User> findByUsername(String username);
 
+    /**
+     * Returns all {@link User}s that starts with a given username.
+     *
+     * @param username
+     * @return
+     */
     Flux<User> findByUsernameLike(String username);
 }

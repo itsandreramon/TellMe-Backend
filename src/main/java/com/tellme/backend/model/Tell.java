@@ -7,24 +7,41 @@
 
 package com.tellme.backend.model;
 
+import com.tellme.backend.validation.ValidDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
 
-@Document
+
+@Document(collection = "tells")
 @Data
 @AllArgsConstructor
 @ToString
 public class Tell {
 
-    @Id private final String id;
+    @Id
+    @NotBlank
+    private final String id;
+
+    @NotBlank
     private final String senderUid;
+
+    @NotBlank
     private final String receiverUid;
+
+    @NotBlank
     private final String question;
+
     private final String reply;
+
+    @ValidDate
+    @NotBlank
     private final String sendDate;
+
+    @ValidDate
     private final String replyDate;
 }

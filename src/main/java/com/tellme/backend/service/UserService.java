@@ -44,7 +44,8 @@ public class UserService {
     }
 
     public Mono<User> save(User user) {
-        return userRepository.save(user);
+        return firebaseRepository.findAuthUserById(user.getUid())
+                .flatMap(authUser -> userRepository.save(user));
     }
 
     public Mono<Void> deleteById(String id) {

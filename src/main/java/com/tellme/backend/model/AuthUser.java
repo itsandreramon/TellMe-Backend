@@ -13,7 +13,6 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
 @Data
 @AllArgsConstructor
 @Builder

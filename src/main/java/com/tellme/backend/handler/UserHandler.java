@@ -14,10 +14,12 @@ import com.tellme.backend.model.User;
 import com.tellme.backend.service.FeedService;
 import com.tellme.backend.service.InboxService;
 import com.tellme.backend.service.UserService;
+import com.tellme.backend.validation.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -55,10 +57,9 @@ public class UserHandler {
         String username = request.pathVariable("username");
         Mono<User> userMono = userService.findByUsername(username);
 
-        return ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(userMono, User.class);
+        return userMono
+                .flatMap(user -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(userMono, User.class))
+                .switchIfEmpty(ServerResponse.notFound().build());
     }
 
     public Mono<ServerResponse> findByUsernameLike(ServerRequest request) {
@@ -72,7 +73,7 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> findAuthUserById(ServerRequest request) {
-        String id = request.pathVariable("id");
+        String id = request.pathVariable("uid");
         Mono<AuthUser> authUserMono = userService.findAuthUserById(id);
 
         return authUserMono
@@ -82,15 +83,41 @@ public class UserHandler {
 
     public Mono<ServerResponse> save(ServerRequest request) {
         Mono<User> userMono = request.bodyToMono(User.class)
+                .doOnNext(ValidationUtil::validate)
                 .flatMap(userService::save);
 
-        return ServerResponse
-                .status(HttpStatus.CREATED)
-                .body(userMono, User.class);
+        return userMono
+                .flatMap(u -> ServerResponse.status(HttpStatus.CREATED).body(userMono, User.class))
+                .onErrorResume(e -> {
+                    log.error(e.getStackTrace());
+                    return ServerResponse.status(HttpStatus.BAD_REQUEST).build();
+                });
+    }
+
+    public Mono<ServerResponse> update(ServerRequest request) {
+        return save(request);
+    }
+
+    public Mono<ServerResponse> deleteById(ServerRequest request) {
+        String id = request.pathVariable("uid");
+
+        // TODO Return 404 if not found
+
+        return userService.findById(id)
+                .flatMap(user -> userService.deleteById(id)
+                        .flatMap(v -> ServerResponse.ok().build()));
+    }
+
+    public Mono<ServerResponse> deleteAll(ServerRequest request) {
+        Mono<Void> deleteMono = userService.deleteAll();
+
+        return deleteMono
+                .flatMap(v -> ServerResponse.ok().build())
+                .switchIfEmpty(ServerResponse.status(HttpStatus.CONFLICT).build());
     }
 
     public Mono<ServerResponse> getFeedByUserId(ServerRequest request) {
-        String id = request.pathVariable("id");
+        String id = request.pathVariable("uid");
         Flux<FeedItem> feedItemFlux = feedService.getFeedByUserId(id);
 
         return ServerResponse
@@ -100,7 +127,7 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> getInboxByUserId(ServerRequest request) {
-        String id = request.pathVariable("id");
+        String id = request.pathVariable("uid");
         Flux<Tell> inboxItemFlux = inboxService.getInboxByUserId(id);
 
         return ServerResponse
