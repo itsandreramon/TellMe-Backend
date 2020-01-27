@@ -8,7 +8,6 @@
 package com.tellme.backend.handler;
 
 import com.tellme.backend.model.Tell;
-import com.tellme.backend.model.User;
 import com.tellme.backend.service.TellService;
 import com.tellme.backend.validation.ValidationUtil;
 import lombok.RequiredArgsConstructor;
