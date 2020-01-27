@@ -7,9 +7,7 @@
 
 package com.tellme.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -21,7 +19,7 @@ import java.util.List;
 @ToString
 public class User {
 
-    @Id private String uid;
+    @Id private final String uid;
     private final String name;
     private final String username;
     private final String email;

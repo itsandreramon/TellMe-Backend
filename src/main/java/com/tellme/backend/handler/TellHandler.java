@@ -24,14 +24,16 @@ public class TellHandler {
 
     private final TellService tellService;
 
-    public Mono<ServerResponse> insert(ServerRequest request) {
+    public Mono<ServerResponse> save(ServerRequest request) {
         Mono<Tell> tellMono = request.bodyToMono(Tell.class)
                 .flatMap(tellService::save);
 
-        return ServerResponse.status(HttpStatus.CREATED).body(tellMono, User.class);
+        return ServerResponse
+                .status(HttpStatus.CREATED)
+                .body(tellMono, User.class);
     }
 
-    public Mono<ServerResponse> getAll(ServerRequest request) {
+    public Mono<ServerResponse> findAll(ServerRequest request) {
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)

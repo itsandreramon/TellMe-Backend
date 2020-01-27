@@ -20,8 +20,8 @@ public class TellRouter {
     @Bean
     RouterFunction<ServerResponse> tellRoutes(TellHandler handler) {
         return RouterFunctions.route()
-                .POST("/tells", handler::insert)
-                .GET("/tells", handler::getAll)
+                .POST("/tells", handler::save)
+                .GET("/tells", handler::findAll)
                 .build();
     }
 }

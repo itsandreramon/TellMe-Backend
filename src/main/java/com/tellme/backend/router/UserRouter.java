@@ -20,9 +20,14 @@ public class UserRouter {
     @Bean
     RouterFunction<ServerResponse> userRoutes(UserHandler handler) {
         return RouterFunctions.route()
-                .GET("/users", handler::getAll)
-                .GET("/users/{id}", handler::getById)
-                .GET("/users/{id}/feed", handler::getFeedById)
+                .GET("/users", handler::findAll)
+                .GET("/users/uid/{uid}", handler::findById)
+                .GET("/users/username/{username}", handler::findByUsername)
+                .GET("/users/search/{query}", handler::findByUsernameLike)
+                .GET("/users/{id}/feed", handler::getFeedByUserId)
+                .GET("/users/{id}/inbox", handler::getInboxByUserId)
+                .GET("/users/{id}/auth", handler::findAuthUserById)
+                .POST("/users", handler::save)
                 .build();
     }
 }

@@ -19,7 +19,7 @@ public class InboxService {
 
     private final TellRepository tellRepository;
 
-    public Flux<Tell> getInboxByUser(String id) {
+    public Flux<Tell> getInboxByUserId(String id) {
         return tellRepository.findByReceiverUid(id)
                 .filter(tell -> tell.getReply().isEmpty());
     }

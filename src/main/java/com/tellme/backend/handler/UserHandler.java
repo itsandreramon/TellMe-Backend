@@ -7,46 +7,105 @@
 
 package com.tellme.backend.handler;
 
+import com.tellme.backend.model.AuthUser;
 import com.tellme.backend.model.FeedItem;
+import com.tellme.backend.model.Tell;
 import com.tellme.backend.model.User;
 import com.tellme.backend.service.FeedService;
+import com.tellme.backend.service.InboxService;
 import com.tellme.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class UserHandler {
 
     private final UserService userService;
     private final FeedService feedService;
+    private final InboxService inboxService;
 
-    public Mono<ServerResponse> getAll(ServerRequest request) {
-        return ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(userService.findAll(), User.class);
-    }
-
-    public Mono<ServerResponse> getById(ServerRequest request) {
-        String id = request.pathVariable("id");
+    public Mono<ServerResponse> findAll(ServerRequest request) {
+        Flux<User> userFlux = userService.findAll();
 
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(userService.findById(id), User.class);
+                .body(userFlux, User.class);
     }
 
-    public Mono<ServerResponse> getFeedById(ServerRequest request) {
-        String id = request.pathVariable("id");
+    public Mono<ServerResponse> findById(ServerRequest request) {
+        String id = request.pathVariable("uid");
+        Mono<User> userMono = userService.findById(id);
+
+        return userMono
+                .flatMap(user -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(user))
+                .switchIfEmpty(ServerResponse.notFound().build());
+    }
+
+    public Mono<ServerResponse> findByUsername(ServerRequest request) {
+        String username = request.pathVariable("username");
+        Mono<User> userMono = userService.findByUsername(username);
 
         return ServerResponse
                 .ok()
-                .contentType(MediaType.APPLICATION_STREAM_JSON)
-                .body(feedService.getFeedByUser(id), FeedItem.class);
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(userMono, User.class);
+    }
+
+    public Mono<ServerResponse> findByUsernameLike(ServerRequest request) {
+        String query = request.pathVariable("username");
+        Flux<User> userFlux = userService.findByUsernameLike(query);
+
+        return ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(userFlux, User.class);
+    }
+
+    public Mono<ServerResponse> findAuthUserById(ServerRequest request) {
+        String id = request.pathVariable("id");
+        Mono<AuthUser> authUserMono = userService.findAuthUserById(id);
+
+        return authUserMono
+                .flatMap(user -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(user))
+                .switchIfEmpty(ServerResponse.notFound().build());
+    }
+
+    public Mono<ServerResponse> save(ServerRequest request) {
+        Mono<User> userMono = request.bodyToMono(User.class)
+                .flatMap(userService::save);
+
+        return ServerResponse
+                .status(HttpStatus.CREATED)
+                .body(userMono, User.class);
+    }
+
+    public Mono<ServerResponse> getFeedByUserId(ServerRequest request) {
+        String id = request.pathVariable("id");
+        Flux<FeedItem> feedItemFlux = feedService.getFeedByUserId(id);
+
+        return ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(feedItemFlux, FeedItem.class);
+    }
+
+    public Mono<ServerResponse> getInboxByUserId(ServerRequest request) {
+        String id = request.pathVariable("id");
+        Flux<Tell> inboxItemFlux = inboxService.getInboxByUserId(id);
+
+        return ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(inboxItemFlux, Tell.class);
     }
 }

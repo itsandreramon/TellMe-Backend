@@ -7,7 +7,9 @@
 
 package com.tellme.backend.service;
 
+import com.tellme.backend.model.AuthUser;
 import com.tellme.backend.model.User;
+import com.tellme.backend.repository.FirebaseRepository;
 import com.tellme.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,13 +21,26 @@ import reactor.core.publisher.Mono;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FirebaseRepository firebaseRepository;
 
     public Mono<User> findById(String id) {
         return userRepository.findById(id);
     }
 
+    public Mono<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public Flux<User> findByUsernameLike(String query) {
+        return userRepository.findByUsernameLike(query);
+    }
+
     public Flux<User> findAll() {
         return userRepository.findAll();
+    }
+
+    public Mono<AuthUser> findAuthUserById(String id) {
+        return firebaseRepository.findAuthUserById(id);
     }
 
     public Mono<User> save(User user) {
