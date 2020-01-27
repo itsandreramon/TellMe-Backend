@@ -18,5 +18,5 @@ import lombok.ToString;
 @ToString
 public class AuthUser {
 
-    private String email;
+	private String email;
 }

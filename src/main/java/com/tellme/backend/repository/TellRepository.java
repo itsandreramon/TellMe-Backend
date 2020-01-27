@@ -13,19 +13,19 @@ import reactor.core.publisher.Flux;
 
 public interface TellRepository extends ReactiveCrudRepository<Tell, String> {
 
-    /**
-     * Returns all {@link Tell}s that contain a given receiver uid.
-     *
-     * @param receiverUid
-     * @return
-     */
-    Flux<Tell> findByReceiverUid(String receiverUid);
+	/**
+	 * Returns all {@link Tell}s that belong to a given receiver uid.
+	 *
+	 * @param receiverUid
+	 * @return
+	 */
+	Flux<Tell> findByReceiverUid(String receiverUid);
 
-    /**
-     * Returns all {@link Tell}s that contain a given sender uid.
-     *
-     * @param senderUid
-     * @return
-     */
-    Flux<Tell> findBySenderUid(String senderUid);
+	/**
+	 * Returns all {@link Tell}s that belong to a given sender uid.
+	 *
+	 * @param senderUid
+	 * @return
+	 */
+	Flux<Tell> findBySenderUid(String senderUid);
 }

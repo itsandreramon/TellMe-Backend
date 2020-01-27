@@ -20,39 +20,38 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final FirebaseRepository firebaseRepository;
+	private final UserRepository userRepository;
+	private final FirebaseRepository firebaseRepository;
 
-    public Mono<User> findById(String id) {
-        return userRepository.findById(id);
-    }
+	public Mono<User> findById(String id) {
+		return userRepository.findById(id);
+	}
 
-    public Mono<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
+	public Mono<User> findByUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
 
-    public Flux<User> findByUsernameLike(String query, Integer limit) {
-        return userRepository.findByUsernameLike(query).take(limit);
-    }
+	public Flux<User> findByUsernameLike(String query, Integer limit) {
+		return userRepository.findByUsernameLike(query).take(limit);
+	}
 
-    public Flux<User> findAll() {
-        return userRepository.findAll();
-    }
+	public Flux<User> findAll() {
+		return userRepository.findAll();
+	}
 
-    public Mono<AuthUser> findAuthUserById(String id) {
-        return firebaseRepository.findAuthUserById(id);
-    }
+	public Mono<AuthUser> findAuthUserById(String id) {
+		return firebaseRepository.findAuthUserById(id);
+	}
 
-    public Mono<User> save(User user) {
-        return firebaseRepository.findAuthUserById(user.getUid())
-                .flatMap(authUser -> userRepository.save(user));
-    }
+	public Mono<User> save(User user) {
+		return firebaseRepository.findAuthUserById(user.getUid()).flatMap(authUser -> userRepository.save(user));
+	}
 
-    public Mono<Void> deleteById(String id) {
-        return userRepository.deleteById(id);
-    }
+	public Mono<Void> deleteById(String id) {
+		return userRepository.deleteById(id);
+	}
 
-    public Mono<Void> deleteAll() {
-        return userRepository.deleteAll();
-    }
+	public Mono<Void> deleteAll() {
+		return userRepository.deleteAll();
+	}
 }

@@ -18,39 +18,41 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class TellService {
 
-    private final TellRepository tellRepository;
+	private final TellRepository tellRepository;
 
-    public Mono<Tell> findById(String id) {
-        return tellRepository.findById(id);
-    }
+	public Mono<Tell> findById(String id) {
+		return tellRepository.findById(id);
+	}
 
-    public Flux<Tell> findAll() {
-        return tellRepository.findAll();
-    }
+	public Flux<Tell> findAll() {
+		return tellRepository.findAll();
+	}
 
-    public Mono<Tell> save(Tell tell) {
-        // set the id to null and let the db generate one
-        Tell updatedTell = tell.toBuilder().id(null).build();
-        return tellRepository.save(updatedTell);
-    }
+	public Mono<Tell> save(Tell tell) {
 
-    public Mono<Tell> update(Tell tell) {
-        return tellRepository.save(tell);
-    }
+		// set the id to null and let the db generate one
+		Tell updatedTell = tell.toBuilder().id(null).build();
 
-    public Mono<Void> deleteAll() {
-        return tellRepository.deleteAll();
-    }
+		return tellRepository.save(updatedTell);
+	}
 
-    public Mono<Void> deleteById(String id) {
-        return tellRepository.deleteById(id);
-    }
+	public Mono<Tell> update(Tell tell) {
+		return tellRepository.save(tell);
+	}
 
-    public Flux<Tell> findByReceiverUid(String receiverUid) {
-        return tellRepository.findByReceiverUid(receiverUid);
-    }
+	public Mono<Void> deleteAll() {
+		return tellRepository.deleteAll();
+	}
 
-    public Flux<Tell> findBySenderUid(String senderUid) {
-        return tellRepository.findByReceiverUid(senderUid);
-    }
+	public Mono<Void> deleteById(String id) {
+		return tellRepository.deleteById(id);
+	}
+
+	public Flux<Tell> findByReceiverUid(String receiverUid) {
+		return tellRepository.findByReceiverUid(receiverUid);
+	}
+
+	public Flux<Tell> findBySenderUid(String senderUid) {
+		return tellRepository.findByReceiverUid(senderUid);
+	}
 }

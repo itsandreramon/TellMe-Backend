@@ -16,9 +16,10 @@ public class DateUtil {
 
     public static ZonedDateTime convertStringToDate(String timestamp) {
         try {
-            String date = ZonedDateTime.parse(timestamp)
-                            .truncatedTo(ChronoUnit.MILLIS)
-                            .format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+            String date = ZonedDateTime
+					.parse(timestamp)
+					.truncatedTo(ChronoUnit.MILLIS)
+                    .format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
 
             return ZonedDateTime.parse(date);
         } catch (DateTimeParseException e) {

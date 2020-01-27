@@ -17,16 +17,12 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApplicationTest {
 
-    @Autowired
-    private WebTestClient webTestClient;
+	@Autowired
+	private WebTestClient webTestClient;
 
-    @Test
-    public void testHello() {
-        webTestClient
-                .get().uri("/")
-                .accept(MediaType.TEXT_PLAIN)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(String.class).isEqualTo("Running...");
-    }
+	@Test
+	public void testHello() {
+		webTestClient.get().uri("/").accept(MediaType.TEXT_PLAIN).exchange().expectStatus().isOk()
+				.expectBody(String.class).isEqualTo("Running...");
+	}
 }

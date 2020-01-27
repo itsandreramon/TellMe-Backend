@@ -8,15 +8,13 @@
 package com.tellme.backend.model;
 
 import com.tellme.backend.validation.ValidDate;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.validation.constraints.NotBlank;
-
 
 @Document(collection = "tells")
 @Data
@@ -25,24 +23,24 @@ import javax.validation.constraints.NotBlank;
 @Builder(toBuilder = true)
 public class Tell {
 
-    @Id
-    private String id;
+	@Id
+	private String id;
 
-    @NotBlank
-    private String senderUid;
+	@NotBlank
+	private String senderUid;
 
-    @NotBlank
-    private String receiverUid;
+	@NotBlank
+	private String receiverUid;
 
-    @NotBlank
-    private String question;
+	@NotBlank
+	private String question;
 
-    private String reply;
+	private String reply;
 
-    @ValidDate
-    @NotBlank
-    private String sendDate;
+	@ValidDate
+	@NotBlank
+	private String sendDate;
 
-    @ValidDate
-    private String replyDate;
+	@ValidDate
+	private String replyDate;
 }

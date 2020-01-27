@@ -12,11 +12,8 @@ import com.tellme.backend.model.AuthUser;
 
 public class FirebaseUtil {
 
-    public static AuthUser mapRecordToAuthUser(UserRecord userRecord) {
-        String email = userRecord.getEmail();
-
-        return AuthUser.builder()
-                .email(email)
-                .build();
-    }
+	public static AuthUser mapRecordToAuthUser(UserRecord userRecord) {
+		String email = userRecord.getEmail();
+		return AuthUser.builder().email(email).build();
+	}
 }

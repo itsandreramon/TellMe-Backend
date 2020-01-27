@@ -21,24 +21,20 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class FeedService {
 
-    private final TellRepository tellRepository;
-    private final UserRepository userRepository;
+	private final TellRepository tellRepository;
+	private final UserRepository userRepository;
 
-    public Flux<FeedItem> getFeedByUserId(String id) {
+	public Flux<FeedItem> getFeedByUserId(String id) {
 
-        Flux<String> followingFlux = userRepository.findById(id)
-                .map(User::getFollowing)
-                .flatMapMany(Flux::fromIterable);
+		Flux<String> followingFlux = userRepository.findById(id).map(User::getFollowing)
+				.flatMapMany(Flux::fromIterable);
 
-        Flux<Tell> tellFlux = followingFlux
-                .flatMap(tellRepository::findByReceiverUid)
-                .filter(tell -> !tell.getReply().isEmpty());
+		Flux<Tell> tellFlux = followingFlux.flatMap(tellRepository::findByReceiverUid)
+				.filter(tell -> !tell.getReply().isEmpty());
 
-        Flux<FeedItem> feedItemFlux = tellFlux
-                .flatMap(tell -> userRepository
-                        .findById(tell.getReceiverUid())
-                        .map(user -> TransformationUtil.feedItemFrom(user, tell)));
+		Flux<FeedItem> feedItemFlux = tellFlux.flatMap(tell -> userRepository.findById(tell.getReceiverUid())
+				.map(user -> TransformationUtil.feedItemFrom(user, tell)));
 
-        return feedItemFlux;
-    }
+		return feedItemFlux;
+	}
 }

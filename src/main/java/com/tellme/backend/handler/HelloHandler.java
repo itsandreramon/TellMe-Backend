@@ -21,8 +21,8 @@ public class HelloHandler {
 
     public Mono<ServerResponse> hello(ServerRequest request) {
         return ServerResponse
-                .ok()
-                .contentType(MediaType.TEXT_PLAIN)
-                .body(BodyInserters.fromValue("Running..."));
+				.ok()
+				.contentType(MediaType.TEXT_PLAIN)
+				.body(BodyInserters.fromValue("Running..."));
     }
 }

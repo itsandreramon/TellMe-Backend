@@ -17,10 +17,9 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class InboxService {
 
-    private final TellRepository tellRepository;
+	private final TellRepository tellRepository;
 
-    public Flux<Tell> getInboxByUid(String id) {
-        return tellRepository.findByReceiverUid(id)
-                .filter(tell -> tell.getReply().isEmpty());
-    }
+	public Flux<Tell> getInboxByUid(String id) {
+		return tellRepository.findByReceiverUid(id).filter(tell -> tell.getReply().isEmpty());
+	}
 }

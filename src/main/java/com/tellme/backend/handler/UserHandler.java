@@ -34,6 +34,12 @@ public class UserHandler {
     private final FeedService feedService;
     private final InboxService inboxService;
 
+    /**
+     * Returns all {@link User}s from the database.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> findAll(ServerRequest request) {
         Flux<User> userFlux = userService.findAll();
 
@@ -43,24 +49,42 @@ public class UserHandler {
                 .body(userFlux, User.class);
     }
 
+    /**
+     * Returns a {@link User} that matches a given uid.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> findByUid(ServerRequest request) {
         String uid = request.pathVariable("uid");
         Mono<User> userMono = userService.findById(uid);
 
         return userMono
-                .flatMap(user -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(user))
+                .then(ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(userMono, User.class))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
+    /**
+     * Returns a {@link User} that matches a given username.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> findByUsername(ServerRequest request) {
         String username = request.pathVariable("username");
         Mono<User> userMono = userService.findByUsername(username);
 
         return userMono
-                .flatMap(user -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(userMono, User.class))
+                .then(ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(userMono, User.class))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
+    /**
+     * Returns all {@link User}s that match a given username query.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> findByUsernameLike(ServerRequest request) {
         String query = request.pathVariable("query");
         Integer limit = Integer.valueOf(request.pathVariable("limit"));
@@ -71,18 +95,29 @@ public class UserHandler {
                 .body(userService.findByUsernameLike(query, limit), User.class);
     }
 
+    /**
+     * Returns an {@link AuthUser} that matches a given uid.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> findAuthUserByUid(ServerRequest request) {
         String uid = request.pathVariable("uid");
         Mono<AuthUser> authUserMono = userService.findAuthUserById(uid);
 
         return authUserMono
-                .flatMap(user -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(user))
+                .then(ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(authUserMono, AuthUser.class))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
+    /**
+     * Saves a given {@link User} to the database.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> save(ServerRequest request) {
-        Mono<User> userMono = request.bodyToMono(User.class)
-                .doOnNext(ValidationUtil::validate)
+        Mono<User> userMono = request.bodyToMono(User.class).doOnNext(ValidationUtil::validate)
                 .flatMap(userService::save);
 
         return userMono
@@ -90,10 +125,22 @@ public class UserHandler {
                 .switchIfEmpty(ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
     }
 
+    /**
+     * Updates a given {@link User} in the database.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> update(ServerRequest request) {
         return save(request);
     }
 
+    /**
+     * Deletes a {@link User} that matches a given uid from the database.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> deleteByUid(ServerRequest request) {
         String uid = request.pathVariable("uid");
         Mono<User> userMono = userService.findById(uid);
@@ -106,14 +153,26 @@ public class UserHandler {
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false));
     }
 
+    /**
+     * Deletes all {@link User}s from the database.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> deleteAll(ServerRequest request) {
         Mono<Void> deleteMono = userService.deleteAll();
 
         return deleteMono
-                .flatMap(v -> ServerResponse.ok().bodyValue(true))
+                .then(ServerResponse.ok().bodyValue(true))
                 .switchIfEmpty(ServerResponse.status(HttpStatus.CONFLICT).bodyValue(false));
     }
 
+    /**
+     * Returns the feed for a {@link User}.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> getFeedByUid(ServerRequest request) {
         String uid = request.pathVariable("uid");
         Flux<FeedItem> feedItemFlux = feedService.getFeedByUserId(uid);
@@ -124,6 +183,12 @@ public class UserHandler {
                 .body(feedItemFlux, FeedItem.class);
     }
 
+    /**
+     * Returns the inbox for a {@link User}.
+     *
+     * @param request
+     * @return
+     */
     public Mono<ServerResponse> getInboxByUid(ServerRequest request) {
         String uid = request.pathVariable("uid");
         Flux<Tell> inboxItemFlux = inboxService.getInboxByUid(uid);

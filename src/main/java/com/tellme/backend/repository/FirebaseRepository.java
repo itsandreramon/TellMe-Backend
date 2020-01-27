@@ -20,13 +20,9 @@ public class FirebaseRepository {
 
     public Mono<AuthUser> findAuthUserById(String id) {
         try {
-
             // block?
             UserRecord userRecord = FirebaseAuth.getInstance().getUser(id);
-
-            return Mono.just(userRecord)
-                    .map(FirebaseUtil::mapRecordToAuthUser);
-
+            return Mono.just(userRecord).map(FirebaseUtil::mapRecordToAuthUser);
         } catch (FirebaseAuthException e) {
             return Mono.empty();
         }

@@ -17,10 +17,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @Configuration
 public class HelloRouter {
 
-    @Bean
-    RouterFunction<ServerResponse> helloRoutes(HelloHandler handler) {
-        return RouterFunctions.route()
-                .GET("/", handler::hello)
-                .build();
-    }
+	@Bean
+	RouterFunction<ServerResponse> helloRoutes(HelloHandler handler) {
+		return RouterFunctions.route().GET("/", handler::hello).build();
+	}
 }

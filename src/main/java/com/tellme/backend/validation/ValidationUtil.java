@@ -9,6 +9,7 @@ package com.tellme.backend.validation;
 
 import com.tellme.backend.model.Tell;
 import com.tellme.backend.model.User;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
