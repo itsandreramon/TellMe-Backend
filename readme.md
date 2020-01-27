@@ -37,3 +37,6 @@ $ openssl aes-256-cbc -d -in release/serviceAccountKey.json.encrypted -k $KEY >>
 ```
 
 *Please make sure to place the corresponding ```serviceAccountKey.json``` inside the ```src/main/resources``` folder.*
+
+### Disclaimer
+This project was built for educational purposes and does not represent a production ready application.
