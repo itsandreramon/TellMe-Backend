@@ -29,7 +29,9 @@ public class TellService {
     }
 
     public Mono<Tell> save(Tell tell) {
-        return tellRepository.save(tell);
+        // set the id to null and let the db generate one
+        Tell updatedTell = tell.toBuilder().id(null).build();
+        return tellRepository.save(updatedTell);
     }
 
     public Mono<Void> deleteAll() {

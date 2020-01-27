@@ -9,6 +9,7 @@ package com.tellme.backend.model;
 
 import com.tellme.backend.validation.ValidDate;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
@@ -21,27 +22,27 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @ToString
+@Builder(toBuilder = true)
 public class Tell {
 
     @Id
-    @NotBlank
-    private final String id;
+    private String id;
 
     @NotBlank
-    private final String senderUid;
+    private String senderUid;
 
     @NotBlank
-    private final String receiverUid;
+    private String receiverUid;
 
     @NotBlank
-    private final String question;
+    private String question;
 
-    private final String reply;
+    private String reply;
 
     @ValidDate
     @NotBlank
-    private final String sendDate;
+    private String sendDate;
 
     @ValidDate
-    private final String replyDate;
+    private String replyDate;
 }

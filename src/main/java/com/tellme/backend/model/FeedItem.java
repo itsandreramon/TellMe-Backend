@@ -24,20 +24,20 @@ public class FeedItem {
 
     @Id
     @NotBlank
-    private final String id;
+    private String id;
 
-    private final String receiverAvatar;
-
-    @NotBlank
-    private final String receiverUsername;
+    private String receiverAvatar;
 
     @NotBlank
-    private final String question;
+    private String receiverUsername;
 
     @NotBlank
-    private final String reply;
+    private String question;
+
+    @NotBlank
+    private String reply;
 
     @ValidDate
     @NotBlank
-    private final String replyDate;
+    private String replyDate;
 }

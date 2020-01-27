@@ -30,9 +30,9 @@ public class TellHandler {
                 .doOnNext(ValidationUtil::validate)
                 .flatMap(tellService::save);
 
-        return ServerResponse
-                .status(HttpStatus.CREATED)
-                .body(tellMono, User.class);
+        return tellMono
+                .then(ServerResponse.ok().bodyValue(true))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false));
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {
@@ -76,10 +76,11 @@ public class TellHandler {
     public Mono<ServerResponse> deleteById(ServerRequest request) {
         String id = request.pathVariable("id");
 
-        // TODO Return 404 if not found
+        Mono<Void> deleteMono = tellService.findById(id)
+                .flatMap(tell -> tellService.deleteById(id));
 
-        return tellService.findById(id)
-                .flatMap(tell -> tellService.deleteById(id)
-                        .flatMap(v -> ServerResponse.ok().build()));
+        return deleteMono
+                .then(ServerResponse.ok().bodyValue(true))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false));
     }
 }

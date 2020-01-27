@@ -43,9 +43,9 @@ public class UserHandler {
                 .body(userFlux, User.class);
     }
 
-    public Mono<ServerResponse> findById(ServerRequest request) {
-        String id = request.pathVariable("uid");
-        Mono<User> userMono = userService.findById(id);
+    public Mono<ServerResponse> findByUid(ServerRequest request) {
+        String uid = request.pathVariable("uid");
+        Mono<User> userMono = userService.findById(uid);
 
         return userMono
                 .flatMap(user -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(user))
@@ -62,18 +62,18 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> findByUsernameLike(ServerRequest request) {
-        String query = request.pathVariable("username");
-        Flux<User> userFlux = userService.findByUsernameLike(query);
+        String query = request.pathVariable("query");
+        Integer limit = Integer.valueOf(request.pathVariable("limit"));
 
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(userFlux, User.class);
+                .body(userService.findByUsernameLike(query, limit), User.class);
     }
 
-    public Mono<ServerResponse> findAuthUserById(ServerRequest request) {
-        String id = request.pathVariable("uid");
-        Mono<AuthUser> authUserMono = userService.findAuthUserById(id);
+    public Mono<ServerResponse> findAuthUserByUid(ServerRequest request) {
+        String uid = request.pathVariable("uid");
+        Mono<AuthUser> authUserMono = userService.findAuthUserById(uid);
 
         return authUserMono
                 .flatMap(user -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(user))
@@ -86,38 +86,37 @@ public class UserHandler {
                 .flatMap(userService::save);
 
         return userMono
-                .flatMap(u -> ServerResponse.status(HttpStatus.CREATED).body(userMono, User.class))
-                .onErrorResume(e -> {
-                    log.error(e.getStackTrace());
-                    return ServerResponse.status(HttpStatus.BAD_REQUEST).build();
-                });
+                .then(ServerResponse.status(HttpStatus.CREATED).bodyValue(true))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {
         return save(request);
     }
 
-    public Mono<ServerResponse> deleteById(ServerRequest request) {
-        String id = request.pathVariable("uid");
+    public Mono<ServerResponse> deleteByUid(ServerRequest request) {
+        String uid = request.pathVariable("uid");
+        Mono<User> userMono = userService.findById(uid);
 
-        // TODO Return 404 if not found
+        Mono<Void> deleteMono = userMono
+                .flatMap(user -> userService.deleteById(uid));
 
-        return userService.findById(id)
-                .flatMap(user -> userService.deleteById(id)
-                        .flatMap(v -> ServerResponse.ok().build()));
+        return deleteMono
+                .then(ServerResponse.ok().bodyValue(true))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false));
     }
 
     public Mono<ServerResponse> deleteAll(ServerRequest request) {
         Mono<Void> deleteMono = userService.deleteAll();
 
         return deleteMono
-                .flatMap(v -> ServerResponse.ok().build())
-                .switchIfEmpty(ServerResponse.status(HttpStatus.CONFLICT).build());
+                .flatMap(v -> ServerResponse.ok().bodyValue(true))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.CONFLICT).bodyValue(false));
     }
 
-    public Mono<ServerResponse> getFeedByUserId(ServerRequest request) {
-        String id = request.pathVariable("uid");
-        Flux<FeedItem> feedItemFlux = feedService.getFeedByUserId(id);
+    public Mono<ServerResponse> getFeedByUid(ServerRequest request) {
+        String uid = request.pathVariable("uid");
+        Flux<FeedItem> feedItemFlux = feedService.getFeedByUserId(uid);
 
         return ServerResponse
                 .ok()
@@ -125,9 +124,9 @@ public class UserHandler {
                 .body(feedItemFlux, FeedItem.class);
     }
 
-    public Mono<ServerResponse> getInboxByUserId(ServerRequest request) {
-        String id = request.pathVariable("uid");
-        Flux<Tell> inboxItemFlux = inboxService.getInboxByUserId(id);
+    public Mono<ServerResponse> getInboxByUid(ServerRequest request) {
+        String uid = request.pathVariable("uid");
+        Flux<Tell> inboxItemFlux = inboxService.getInboxByUid(uid);
 
         return ServerResponse
                 .ok()

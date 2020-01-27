@@ -31,8 +31,8 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public Flux<User> findByUsernameLike(String query) {
-        return userRepository.findByUsernameLike(query);
+    public Flux<User> findByUsernameLike(String query, Integer limit) {
+        return userRepository.findByUsernameLike(query).take(limit);
     }
 
     public Flux<User> findAll() {

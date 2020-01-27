@@ -23,24 +23,25 @@ public class User {
 
     @Id
     @NotBlank
-    private final String uid;
+    private String uid;
 
     @NotBlank
-    private final String name;
+    private String name;
 
     @NotBlank
-    private final String username;
+    private String username;
 
     @NotBlank
-    private final String email;
+    private String email;
 
-    private final String avatar;
-
-    private final String about;
+    private String avatar;
 
     @NotNull
-    private final List<String> following;
+    private String about;
 
     @NotNull
-    private final List<String> followers;
+    private List<String> following;
+
+    @NotNull
+    private List<String> followers;
 }

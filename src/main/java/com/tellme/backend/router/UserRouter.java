@@ -23,15 +23,15 @@ public class UserRouter {
                 .path("/api/v2/", b1 -> b1
                         .path("/users", b2 -> b2
                                 .GET("/", handler::findAll)
-                                .GET("/uid/{uid}", handler::findById)
+                                .GET("/uid/{uid}", handler::findByUid)
                                 .GET("/username/{username}", handler::findByUsername)
-                                .GET("/search/{query}", handler::findByUsernameLike)
-                                .GET("/{uid}/feed", handler::getFeedByUserId)
-                                .GET("/{uid}/inbox", handler::getInboxByUserId)
-                                .GET("/{uid}/auth", handler::findAuthUserById)
+                                .GET("/search/{query}/{limit}", handler::findByUsernameLike)
+                                .GET("/uid/{uid}/feed", handler::getFeedByUid)
+                                .GET("/uid/{uid}/inbox", handler::getInboxByUid)
+                                .GET("/uid/{uid}/auth", handler::findAuthUserByUid)
                                 .POST("/", handler::save)
                                 .PUT("/", handler::update)
-                                .DELETE("/uid/{uid}", handler::deleteById)
+                                .DELETE("/uid/{uid}", handler::deleteByUid)
                         )
                 )
                 .build();
