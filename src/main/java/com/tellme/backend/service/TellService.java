@@ -34,6 +34,10 @@ public class TellService {
         return tellRepository.save(updatedTell);
     }
 
+    public Mono<Tell> update(Tell tell) {
+        return tellRepository.save(tell);
+    }
+
     public Mono<Void> deleteAll() {
         return tellRepository.deleteAll();
     }

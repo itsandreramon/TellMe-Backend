@@ -31,11 +31,17 @@ public class TellHandler {
 
         return tellMono
                 .then(ServerResponse.ok().bodyValue(true))
-                .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false));
+                .switchIfEmpty(ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {
-        return save(request);
+        Mono<Tell> tellMono = request.bodyToMono(Tell.class)
+                .doOnNext(ValidationUtil::validate)
+                .flatMap(tellService::update);
+
+        return tellMono
+                .then(ServerResponse.ok().bodyValue(true))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
     }
 
     public Mono<ServerResponse> findById(ServerRequest request) {
