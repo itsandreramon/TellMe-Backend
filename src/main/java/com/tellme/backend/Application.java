@@ -14,6 +14,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @SpringBootApplication
 public class Application {
 
@@ -24,6 +26,10 @@ public class Application {
     @Bean
     CorsWebFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
+
+        config.setAllowedOrigins(Arrays.asList("http://localhost:8080/", "https://tellme-backend.herokuapp.com/"));
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
