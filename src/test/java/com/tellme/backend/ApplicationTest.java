@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Ramon Thiele
+ * Copyright 2020 - André Thiele, Benjamin Will
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApplicationTest {
@@ -22,7 +23,13 @@ public class ApplicationTest {
 
 	@Test
 	public void testHello() {
-		webTestClient.get().uri("/").accept(MediaType.TEXT_PLAIN).exchange().expectStatus().isOk()
+		webTestClient
+				.get()
+				.uri("/")
+				.accept(MediaType.TEXT_PLAIN)
+				.exchange()
+				.expectStatus()
+				.isOk()
 				.expectBody(String.class).isEqualTo("Running...");
 	}
 }

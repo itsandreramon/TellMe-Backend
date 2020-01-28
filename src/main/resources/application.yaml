@@ -3,9 +3,3 @@ spring:
     mongodb:
       uri: mongodb+srv://${TELLME_MONGODB_ATLAS_USERNAME}:${TELLME_MONGODB_ATLAS_PASSWORD}@tellme-vx8cc.mongodb.net/test?retryWrites=true&w=majority
       database: db
-
-okta:
-  oauth2:
-    issuer: https://dev-373103.okta.com/oauth2/default
-    groupsClaim: groups
-    clientId: ${TELLME_BACKEND_OKTA_CLIENT_ID}

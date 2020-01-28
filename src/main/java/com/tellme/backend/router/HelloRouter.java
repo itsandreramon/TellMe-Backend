@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Ramon Thiele
+ * Copyright 2020 - André Thiele, Benjamin Will
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -19,6 +19,8 @@ public class HelloRouter {
 
 	@Bean
 	RouterFunction<ServerResponse> helloRoutes(HelloHandler handler) {
-		return RouterFunctions.route().GET("/", handler::hello).build();
+		return RouterFunctions.route()
+				.GET("/", handler::hello)
+				.build();
 	}
 }

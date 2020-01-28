@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Ramon Thiele
+ * Copyright 2020 - André Thiele, Benjamin Will
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -8,6 +8,7 @@
 package com.tellme.backend.handler;
 
 import com.tellme.backend.model.Tell;
+import com.tellme.backend.model.User;
 import com.tellme.backend.service.TellService;
 import com.tellme.backend.validation.ValidationUtil;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -24,54 +26,114 @@ public class TellHandler {
 
 	private final TellService tellService;
 
-	public Mono<ServerResponse> save(ServerRequest request) {
-		Mono<Tell> tellMono = request.bodyToMono(Tell.class).doOnNext(ValidationUtil::validate)
+	/**
+	 * Saves a given {@link Tell} to the database.
+	 *
+	 * @param request
+	 * @return
+	 */
+	public Mono<ServerResponse> saveTell(ServerRequest request) {
+		Mono<Tell> tellMono = request.bodyToMono(Tell.class)
+				.doOnNext(ValidationUtil::validate)
 				.flatMap(tellService::save);
 
-		return tellMono.then(ServerResponse.ok().bodyValue(true))
+		return tellMono
+				.then(ServerResponse.status(HttpStatus.OK).bodyValue(true))
 				.switchIfEmpty(ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
 	}
 
-	public Mono<ServerResponse> update(ServerRequest request) {
-		Mono<Tell> tellMono = request.bodyToMono(Tell.class).doOnNext(ValidationUtil::validate)
+	/**
+	 * Updates a given {@link User} in the database.
+	 *
+	 * @param request
+	 * @return
+	 */
+	public Mono<ServerResponse> updateTell(ServerRequest request) {
+		Mono<Tell> tellMono = request.bodyToMono(Tell.class)
+				.doOnNext(ValidationUtil::validate)
 				.flatMap(tellService::update);
 
-		return tellMono.then(ServerResponse.ok().bodyValue(true))
+		return tellMono
+				.then(ServerResponse.status(HttpStatus.OK).bodyValue(true))
 				.switchIfEmpty(ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
 	}
 
-	public Mono<ServerResponse> findById(ServerRequest request) {
+	/**
+	 * Returns a {@link Tell} that matches a given id.
+	 *
+	 * @param request
+	 * @return
+	 */
+	public Mono<ServerResponse> getTellById(ServerRequest request) {
 		String id = request.pathVariable("id");
 		Mono<Tell> tellMono = tellService.findById(id);
 
-		return tellMono.flatMap(tell -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(tell))
+		return tellMono
+				.flatMap(tell -> ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(tellMono, Tell.class))
 				.switchIfEmpty(ServerResponse.notFound().build());
 	}
 
-	public Mono<ServerResponse> findAll(ServerRequest request) {
-		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(tellService.findAll(), Tell.class);
+	/**
+	 * Returns all {@link Tell}s from the database.
+	 *
+	 * @param request
+	 * @return
+	 */
+	public Mono<ServerResponse> getAllTells(ServerRequest request) {
+		Flux<Tell> tellFlux = tellService.findAll();
+
+		return ServerResponse
+				.status(HttpStatus.OK)
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(tellFlux, Tell.class);
 	}
 
-	public Mono<ServerResponse> findByReceiverUid(ServerRequest request) {
+	/**
+	 * Returns all {@link Tell}s that correspond to a given receiver uid.
+	 *
+	 * @param request
+	 * @return
+	 */
+	public Mono<ServerResponse> getAllTellsByReceiverUid(ServerRequest request) {
 		String receiverUid = request.pathVariable("receiverUid");
+		Flux<Tell> tellFlux = tellService.findByReceiverUid(receiverUid);
 
-		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-				.body(tellService.findByReceiverUid(receiverUid), Tell.class);
+		return ServerResponse
+				.status(HttpStatus.OK)
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(tellFlux, Tell.class);
 	}
 
-	public Mono<ServerResponse> findBySenderUid(ServerRequest request) {
+	/**
+	 * Returns all {@link Tell}s that correspond to a given sender uid.
+	 *
+	 * @param request
+	 * @return
+	 */
+	public Mono<ServerResponse> getAllTellsBySenderUid(ServerRequest request) {
 		String senderUid = request.pathVariable("senderUid");
+		Flux<Tell> tellFlux = tellService.findBySenderUid(senderUid);
 
-		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(tellService.findBySenderUid(senderUid),
-				Tell.class);
+		return ServerResponse
+				.status(HttpStatus.OK)
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(tellFlux, Tell.class);
 	}
 
-	public Mono<ServerResponse> deleteById(ServerRequest request) {
+	/**
+	 * Deletes a {@link Tell} that matches a given id from the database.
+	 *
+	 * @param request
+	 * @return
+	 */
+	public Mono<ServerResponse> deleteTellById(ServerRequest request) {
 		String id = request.pathVariable("id");
 
-		Mono<Void> deleteMono = tellService.findById(id).flatMap(tell -> tellService.deleteById(id));
+		Mono<Void> deleteMono = tellService.findById(id)
+				.flatMap(tell -> tellService.deleteById(id));
 
-		return deleteMono.then(ServerResponse.ok().bodyValue(true))
+		return deleteMono
+				.then(ServerResponse.status(HttpStatus.OK).bodyValue(true))
 				.switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false));
 	}
 }
