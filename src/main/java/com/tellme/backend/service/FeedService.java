@@ -26,13 +26,16 @@ public class FeedService {
 
 	public Flux<FeedItem> getFeedByUserId(String id) {
 
-		Flux<String> followingFlux = userRepository.findById(id).map(User::getFollowing)
+		Flux<String> followingFlux = userRepository.findById(id)
+				.map(User::getFollowing)
 				.flatMapMany(Flux::fromIterable);
 
-		Flux<Tell> tellFlux = followingFlux.flatMap(tellRepository::findByReceiverUid)
+		Flux<Tell> tellFlux = followingFlux
+				.flatMap(tellRepository::findByReceiverUid)
 				.filter(tell -> !tell.getReply().isEmpty());
 
-		Flux<FeedItem> feedItemFlux = tellFlux.flatMap(tell -> userRepository.findById(tell.getReceiverUid())
+		Flux<FeedItem> feedItemFlux = tellFlux
+				.flatMap(tell -> userRepository.findById(tell.getReceiverUid())
 				.map(user -> TransformationUtil.feedItemFrom(user, tell)));
 
 		return feedItemFlux;

@@ -18,9 +18,19 @@ import reactor.core.publisher.Mono;
 @Repository
 public class FirebaseRepository {
 
+    public Mono<Boolean> verifyIdToken(String idToken) {
+        try {
+            FirebaseAuth.getInstance().verifyIdToken(idToken);
+
+            return Mono.just(true);
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+            return Mono.just(false);
+        }
+    }
+
     public Mono<AuthUser> findAuthUserById(String id) {
         try {
-            // block?
             UserRecord userRecord = FirebaseAuth.getInstance().getUser(id);
             return Mono.just(userRecord).map(FirebaseUtil::mapRecordToAuthUser);
         } catch (FirebaseAuthException e) {
