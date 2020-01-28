@@ -29,8 +29,8 @@ public class TellRouter {
                                 .POST("/", handler::save)
                                 .PUT("/", handler::update)
                                 .DELETE("/id/{id}", handler::deleteById)
-						)
-				)
+                        )
+                )
                 .build();
     }
 }
