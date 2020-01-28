@@ -10,6 +10,7 @@ package com.tellme.backend.router;
 import com.tellme.backend.handler.UserHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -18,6 +19,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class UserRouter {
 
     @Bean
+    @CrossOrigin(origins = "http://localhost:3000")
     RouterFunction<ServerResponse> routes(UserHandler handler) {
         return RouterFunctions.route()
                 .path("/api/v2/", b1 -> b1
