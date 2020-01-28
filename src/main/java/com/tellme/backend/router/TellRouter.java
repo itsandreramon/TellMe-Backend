@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Ramon Thiele
+ * Copyright 2020 - André Thiele, Benjamin Will
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -29,8 +29,8 @@ public class TellRouter {
                                 .POST("/", handler::save)
                                 .PUT("/", handler::update)
                                 .DELETE("/id/{id}", handler::deleteById)
-						)
-				)
+                        )
+                )
                 .build();
     }
 }

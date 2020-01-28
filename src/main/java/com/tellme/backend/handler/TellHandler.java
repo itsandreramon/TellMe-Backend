@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Ramon Thiele
+ * Copyright 2020 - André Thiele, Benjamin Will
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
