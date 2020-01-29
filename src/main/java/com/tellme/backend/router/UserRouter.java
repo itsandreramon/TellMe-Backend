@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Ramon Thiele
+ * Copyright 2020 - André Thiele, Benjamin Will
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -22,16 +22,16 @@ public class UserRouter {
         return RouterFunctions.route()
                 .path("/api/v2/", b1 -> b1
                         .path("/users", b2 -> b2
-                                .GET("/", handler::findAll)
-                                .GET("/uid/{uid}", handler::findByUid)
-                                .GET("/username/{username}", handler::findByUsername)
-                                .GET("/search/{query}/{limit}", handler::findByUsernameLike)
-                                .GET("/uid/{uid}/feed", handler::getFeedByUid)
-                                .GET("/uid/{uid}/inbox", handler::getInboxByUid)
-                                .GET("/uid/{uid}/auth", handler::findAuthUserByUid)
-                                .POST("/", handler::save)
-                                .PUT("/", handler::update)
-                                .DELETE("/uid/{uid}", handler::deleteByUid)
+                                .POST("/", handler::saveUser)
+                                .PUT("/", handler::updateUser)
+                                .GET("/", handler::getAllUsers)
+                                .GET("/username/{username}", handler::getUserByUsername)
+                                .GET("/query/{query}/{limit}", handler::getAllUsersByQuery)
+                                .GET("/uid/{uid}", handler::getUserByUid)
+                                .GET("/uid/{uid}/feed", handler::getFeedByUserUid)
+                                .GET("/uid/{uid}/inbox", handler::getInboxByUserUid)
+                                .GET("/uid/{uid}/auth", handler::getAuthUserByUid)
+                                .DELETE("/uid/{uid}", handler::deleteUserByUid)
                         )
                 )
                 .build();
