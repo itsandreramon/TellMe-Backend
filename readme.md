@@ -4,7 +4,6 @@ The REST backend for TellMe. Written entirely in Java using [Spring Boot](https:
 
 - Fully non-blocking & asynchronous I/O
 - Uses [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) for persistence
-- Uses [Okta](https://www.okta.com/) for authorization
 - Uses [CircleCI](https://circleci.com/) for Continous Integration
 - ```master``` gets automatically deployed to [Heroku](https://www.heroku.com/)
 
