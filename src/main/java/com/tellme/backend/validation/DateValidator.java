@@ -21,6 +21,10 @@ public class DateValidator implements ConstraintValidator<ValidDate, String> {
 
     @Override
     public boolean isValid(String timestamp, ConstraintValidatorContext cxt) {
-        return DateUtil.convertStringToDate(timestamp) != null;
+        if (timestamp.isEmpty()) {
+            return true;
+        } else {
+            return DateUtil.convertStringToDate(timestamp) != null;
+        }
     }
 }

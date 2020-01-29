@@ -23,6 +23,7 @@ public class DateUtil {
 
             return ZonedDateTime.parse(date);
         } catch (DateTimeParseException e) {
+            System.out.println("Invalid date: " + timestamp);
             return null;
         }
     }
