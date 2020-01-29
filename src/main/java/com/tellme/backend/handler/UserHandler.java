@@ -39,12 +39,13 @@ public class UserHandler {
      * @return
      */
     public Mono<ServerResponse> saveUser(ServerRequest request) {
-        Mono<User> userMono = request.bodyToMono(User.class).doOnNext(ValidationUtil::validate)
+        Mono<User> userMono = request.bodyToMono(User.class)
+                .doOnNext(ValidationUtil::validate)
                 .flatMap(userService::save);
 
         return userMono
-                .then(ServerResponse.status(HttpStatus.CREATED).bodyValue(true))
-                .switchIfEmpty(ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
+                .flatMap(user -> ServerResponse.status(HttpStatus.CREATED).bodyValue(true))
+                .onErrorResume(e -> ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
     }
 
     /**
@@ -54,7 +55,13 @@ public class UserHandler {
      * @return
      */
     public Mono<ServerResponse> updateUser(ServerRequest request) {
-        return saveUser(request);
+        Mono<User> userMono = request.bodyToMono(User.class)
+                .doOnNext(ValidationUtil::validate)
+                .flatMap(userService::save);
+
+        return userMono
+                .flatMap(user -> ServerResponse.status(HttpStatus.OK).bodyValue(true))
+                .onErrorResume(e -> ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
     }
 
     /**
