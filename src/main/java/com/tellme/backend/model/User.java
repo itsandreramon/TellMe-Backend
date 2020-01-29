@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class User {
 
