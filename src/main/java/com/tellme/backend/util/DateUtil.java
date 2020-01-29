@@ -7,21 +7,14 @@
 
 package com.tellme.backend.util;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
 
 public class DateUtil {
 
-    public static ZonedDateTime convertStringToDate(String timestamp) {
+    public static Instant convertStringToInstant(String timestamp) {
         try {
-            String date = ZonedDateTime
-					.parse(timestamp)
-					.truncatedTo(ChronoUnit.MILLIS)
-                    .format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
-
-            return ZonedDateTime.parse(date);
+            return Instant.parse(timestamp);
         } catch (DateTimeParseException e) {
             System.out.println("Invalid date: " + timestamp);
             return null;
