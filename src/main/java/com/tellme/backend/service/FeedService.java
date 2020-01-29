@@ -28,7 +28,8 @@ public class FeedService {
 
 		Flux<String> followingFlux = userRepository.findById(id)
 				.map(User::getFollowing)
-				.flatMapMany(Flux::fromIterable);
+				.flatMapMany(Flux::fromIterable)
+				.mergeWith(Flux.just(id));
 
 		Flux<Tell> tellFlux = followingFlux
 				.flatMap(tellRepository::findByReceiverUid)
