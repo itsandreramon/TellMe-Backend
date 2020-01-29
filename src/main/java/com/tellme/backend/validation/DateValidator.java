@@ -24,7 +24,7 @@ public class DateValidator implements ConstraintValidator<ValidDate, String> {
         if (timestamp.isEmpty()) {
             return true;
         } else {
-            return DateUtil.convertStringToDate(timestamp) != null;
+            return DateUtil.convertStringToInstant(timestamp) != null;
         }
     }
 }
