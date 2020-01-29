@@ -9,16 +9,15 @@ package com.tellme.backend.model;
 
 import com.tellme.backend.validation.ValidDate;
 import javax.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "tells")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder(toBuilder = true)
 public class Tell {

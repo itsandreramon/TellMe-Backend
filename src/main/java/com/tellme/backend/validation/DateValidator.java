@@ -21,14 +21,6 @@ public class DateValidator implements ConstraintValidator<ValidDate, String> {
 
     @Override
     public boolean isValid(String timestamp, ConstraintValidatorContext cxt) {
-        boolean valid = true;
-
-        try {
-            DateUtil.convertStringToDate(timestamp);
-        } catch (Exception e) {
-            valid = false;
-        }
-
-        return valid;
+        return DateUtil.convertStringToDate(timestamp) != null;
     }
 }
