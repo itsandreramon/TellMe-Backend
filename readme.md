@@ -3,6 +3,7 @@
 The REST backend for TellMe. Written entirely in Java using [Spring Boot](https://github.com/spring-projects/spring-boot) and [Project Reactor](https://github.com/reactor/reactor-core).
 
 - Fully non-blocking & asynchronous I/O
+- Uses [Reactor Netty](https://github.com/reactor/reactor-netty) Web Server
 - Uses [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) for persistence
 - Uses [CircleCI](https://circleci.com/) for Continous Integration
 - ```master``` gets automatically deployed to [Heroku](https://www.heroku.com/)
