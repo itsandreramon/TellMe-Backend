@@ -26,7 +26,7 @@ $ heroku local web
 ### Accessing the Heroku Deployment
 The Heroku deployment can be accessed via the following URL:
 ```
-$ curl https://tellme-backend.herokuapp.com/ -H "Authorization: Bearer $TOKEN"
+$ curl https://tellme-backend.herokuapp.com/
 ```
 
 ### API
