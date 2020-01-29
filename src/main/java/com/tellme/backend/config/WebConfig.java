@@ -20,6 +20,7 @@ public class WebConfig implements WebFluxConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("https://localhost:3000", "https://tellme-backend.herokuapp.com")
-                .allowedMethods("PUT", "DELETE", "GET", "POST", "OPTIONS");
+                .allowedMethods("PUT", "DELETE", "GET", "POST", "OPTIONS")
+                .allowedHeaders("*");
     }
 }
