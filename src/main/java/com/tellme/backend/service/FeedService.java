@@ -16,7 +16,7 @@ import com.tellme.backend.util.TransformationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.ParallelFlux;
+
 
 @Service
 @RequiredArgsConstructor
@@ -32,15 +32,14 @@ public class FeedService {
 				.flatMapMany(Flux::fromIterable)
 				.mergeWith(Flux.just(id));
 
-		ParallelFlux<Tell> tellFlux = followingFlux
-				.parallel(4)
+		Flux<Tell> tellFlux = followingFlux
 				.flatMap(tellRepository::findByReceiverUid)
 				.filter(tell -> !tell.getReply().isEmpty());
 
-		ParallelFlux<FeedItem> feedItemFlux = tellFlux
+		Flux<FeedItem> feedItemFlux = tellFlux
 				.flatMap(tell -> userRepository.findById(tell.getReceiverUid())
 				.map(user -> TransformationUtil.feedItemFrom(user, tell)));
 
-		return feedItemFlux.sequential();
+		return feedItemFlux;
 	}
 }
