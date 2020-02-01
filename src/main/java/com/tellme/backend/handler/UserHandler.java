@@ -90,7 +90,7 @@ public class UserHandler {
         Flux<User> userFlux = userService.findAll();
 
         return ServerResponse
-                .ok()
+                .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userFlux, User.class);
     }
@@ -123,7 +123,7 @@ public class UserHandler {
         Flux<User> userFlux = userService.findByUsernameLike(query, limit);
 
         return ServerResponse
-                .ok()
+                .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userFlux, User.class);
     }
@@ -172,7 +172,7 @@ public class UserHandler {
         Flux<FeedItem> feedItemFlux = feedService.getFeedByUserId(uid);
 
         return ServerResponse
-                .ok()
+                .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(feedItemFlux, FeedItem.class);
     }
@@ -188,7 +188,7 @@ public class UserHandler {
         Flux<Tell> inboxItemFlux = inboxService.getInboxByUid(uid);
 
         return ServerResponse
-                .ok()
+                .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(inboxItemFlux, Tell.class);
     }
