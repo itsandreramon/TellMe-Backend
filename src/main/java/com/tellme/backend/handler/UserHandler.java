@@ -76,7 +76,7 @@ public class UserHandler {
         Mono<User> userMono = userService.findById(uid);
 
         return userMono
-                .then(ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(userMono, User.class))
+                .flatMap(user -> ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(userMono, User.class))
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).build());
     }
 
@@ -139,7 +139,7 @@ public class UserHandler {
         Mono<AuthUser> authUserMono = userService.findAuthUserById(uid);
 
         return authUserMono
-                .then(ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(authUserMono, AuthUser.class))
+                .flatMap(authUser -> ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(authUserMono, AuthUser.class))
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).build());
     }
 
@@ -157,7 +157,7 @@ public class UserHandler {
                 .flatMap(user -> userService.deleteById(uid));
 
         return deleteMono
-                .then(ServerResponse.status(HttpStatus.OK).bodyValue(true))
+                .flatMap(v -> ServerResponse.status(HttpStatus.OK).bodyValue(true))
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false));
     }
 
