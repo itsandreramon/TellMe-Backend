@@ -38,7 +38,7 @@ public class TellHandler {
 				.flatMap(tellService::save);
 
 		return tellMono
-				.then(ServerResponse.status(HttpStatus.CREATED).bodyValue(true))
+				.flatMap(tell -> ServerResponse.status(HttpStatus.CREATED).bodyValue(true))
 				.onErrorResume(e -> ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
 	}
 
@@ -54,7 +54,7 @@ public class TellHandler {
 				.flatMap(tellService::update);
 
 		return tellMono
-				.then(ServerResponse.status(HttpStatus.OK).bodyValue(true))
+				.flatMap(tell -> ServerResponse.status(HttpStatus.OK).bodyValue(true))
 				.onErrorResume(e -> ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValue(false));
 	}
 
@@ -133,7 +133,7 @@ public class TellHandler {
 				.flatMap(tell -> tellService.deleteById(id));
 
 		return deleteMono
-				.then(ServerResponse.status(HttpStatus.OK).bodyValue(true))
+				.flatMap(v -> ServerResponse.status(HttpStatus.OK).bodyValue(true))
 				.switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false));
 	}
 }
