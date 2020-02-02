@@ -7,12 +7,10 @@
 
 package com.tellme.backend.handler;
 
-import com.tellme.backend.model.AuthUser;
-import com.tellme.backend.model.FeedItem;
-import com.tellme.backend.model.Tell;
-import com.tellme.backend.model.User;
+import com.tellme.backend.model.*;
 import com.tellme.backend.service.FeedService;
 import com.tellme.backend.service.InboxService;
+import com.tellme.backend.service.RepliesService;
 import com.tellme.backend.service.UserService;
 import com.tellme.backend.validation.ValidationUtil;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +30,7 @@ public class UserHandler {
     private final UserService userService;
     private final FeedService feedService;
     private final InboxService inboxService;
+    private final RepliesService repliesService;
 
     /**
      * Saves a given {@link User} to the database.
@@ -191,5 +190,21 @@ public class UserHandler {
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(inboxItemFlux, Tell.class);
+    }
+
+    /**
+     * Returns the replies for a {@link User}.
+     *
+     * @param request
+     * @return
+     */
+    public Mono<ServerResponse> getRepliesByUserUid(ServerRequest request) {
+        String uid = request.pathVariable("uid");
+        Flux<ReplyItem> replyItemsFlux = repliesService.getRepliesByUid(uid);
+
+        return ServerResponse
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(replyItemsFlux, Tell.class);
     }
 }
