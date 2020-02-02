@@ -7,9 +7,8 @@
 
 package com.tellme.backend.service;
 
-import com.tellme.backend.model.FeedItem;
+import com.tellme.backend.model.ReplyItem;
 import com.tellme.backend.model.Tell;
-import com.tellme.backend.model.User;
 import com.tellme.backend.repository.TellRepository;
 import com.tellme.backend.repository.UserRepository;
 import com.tellme.backend.util.TransformationUtil;
@@ -17,29 +16,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-
 @Service
 @RequiredArgsConstructor
-public class FeedService {
+public class RepliesService {
 
     private final TellRepository tellRepository;
     private final UserRepository userRepository;
 
-    public Flux<FeedItem> getFeedByUserId(String id) {
-
-        Flux<String> followingFlux = userRepository.findById(id)
-                .map(User::getFollowing)
-                .flatMapMany(Flux::fromIterable)
-                .mergeWith(Flux.just(id));
-
-        Flux<Tell> tellFlux = followingFlux
-                .flatMap(tellRepository::findByReceiverUid)
+    public Flux<ReplyItem> getRepliesByUid(String id) {
+        Flux<Tell> tellFlux = tellRepository.findBySenderUid(id)
                 .filter(tell -> !tell.getReply().isEmpty());
 
-        Flux<FeedItem> feedItemFlux = tellFlux
+        Flux<ReplyItem> replyItemFlux = tellFlux
                 .flatMap(tell -> userRepository.findById(tell.getReceiverUid())
-                        .map(user -> TransformationUtil.feedItemFrom(user, tell)));
+						.map(user -> TransformationUtil.replyItemFrom(user, tell)));
 
-        return feedItemFlux;
+        return replyItemFlux;
     }
 }

@@ -31,6 +31,7 @@ public class UserRouter {
                                 .GET("/uid/{uid}/feed", handler::getFeedByUserUid)
                                 .GET("/uid/{uid}/inbox", handler::getInboxByUserUid)
                                 .GET("/uid/{uid}/auth", handler::getAuthUserByUid)
+                                .GET("/uid/{uid}/replies", handler::getRepliesByUserUid)
                                 .DELETE("/uid/{uid}", handler::deleteUserByUid)
                         )
                 )
