@@ -106,7 +106,7 @@ public class UserHandler {
         Mono<User> userMono = userService.findByUsername(username);
 
         return userMono
-                .then(ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(userMono, User.class))
+                .flatMap(user -> ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(userMono, User.class))
                 .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).build());
     }
 
