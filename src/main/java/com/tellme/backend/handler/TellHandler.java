@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - André Thiele, Benjamin Will
+ * Copyright 2020 - André Thiele
  *
  * Department of Computer Science and Media
  * University of Applied Sciences Brandenburg
@@ -70,7 +70,7 @@ public class TellHandler {
 
 		return tellMono
 				.flatMap(tell -> ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(tellMono, Tell.class))
-				.switchIfEmpty(ServerResponse.notFound().build());
+				.switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).build());
 	}
 
 	/**
@@ -129,11 +129,9 @@ public class TellHandler {
 	public Mono<ServerResponse> deleteTellById(ServerRequest request) {
 		String id = request.pathVariable("id");
 
-		Mono<Void> deleteMono = tellService.findById(id)
-				.flatMap(tell -> tellService.deleteById(id));
-
-		return deleteMono
-				.flatMap(v -> ServerResponse.status(HttpStatus.OK).bodyValue(true))
-				.switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false));
+		return tellService.findById(id)
+				.flatMap(tell -> tellService.deleteById(tell.getId())
+						.then(ServerResponse.status(HttpStatus.OK).bodyValue(true)))
+				.switchIfEmpty(Mono.defer(() -> ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue(false)));
 	}
 }
