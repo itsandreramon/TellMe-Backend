@@ -30,6 +30,21 @@ The Heroku deployment can be accessed via the following URL:
 $ curl https://tellme-backend.herokuapp.com/
 ```
 
+### Docker
+This project can be built as a Docker image.
+
+1. Create an image using:
+```
+$ docker build . --tag "backend-tellme" \
+	--build-arg db_username="$TELLME_MONGODB_ATLAS_USERNAME" \
+	--build-arg db_password="$TELLME_MONGODB_ATLAS_PASSWORD"
+```
+
+2. Run the image using:
+```
+$ docker run -d -p 8080:8080 backend-tellme:latest
+```
+
 ### API
 You can obtain a valid api key by decrypting the file using:
 ```
