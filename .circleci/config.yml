@@ -27,7 +27,8 @@ jobs:
           command: |
             curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
             heroku auth:token
-      - setup_remote_docker
+      - setup_remote_docker:
+            docker_layer_caching: true
       - run:
           name: Login to Docker
           command: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
@@ -37,6 +38,7 @@ jobs:
             heroku container:login
             heroku container:push --app tellme-backend web
             heroku container:release --app tellme-backend web
+      - run: docker logout
 
   build:
     working_directory: ~/tellme-backend
