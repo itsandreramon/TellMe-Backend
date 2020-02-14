@@ -29,6 +29,9 @@ jobs:
             heroku auth:token
       - setup_remote_docker
       - run:
+          name: Login to Docker
+          command: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
+      - run:
           name: Deploy to Heroku
           command: |
             heroku container:push --app tellme-backend web
