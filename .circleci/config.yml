@@ -27,6 +27,7 @@ jobs:
           command: |
             curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
             heroku auth:token
+      - setup_remote_docker
       - run:
           name: Deploy to Heroku
           command: |
