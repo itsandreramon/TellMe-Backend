@@ -23,8 +23,15 @@ jobs:
           name: Create serviceAccountKey.json
           command: openssl aes-256-cbc -d -in ./release/serviceAccountKey.json.encrypted -k $SERVICE_ACCOUNT_KEY_DECRYPTION_KEY -md md5 >> ./src/main/resources/serviceAccountKey.json
       - run:
+          name: Install Heroku CLI & login
+          command: |
+            curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+            heroku auth:token
+      - run:
           name: Deploy to Heroku
-          command: HEROKU_API_KEY=$HEROKU_API_KEY ./mvnw heroku:deploy
+          command: |
+            heroku container:push --app tellme-backend web
+            heroku container:release --app tellme-backend web
 
   build:
     working_directory: ~/tellme-backend
