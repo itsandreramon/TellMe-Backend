@@ -12,4 +12,4 @@ ARG db_password
 ENV TELLME_MONGODB_ATLAS_USERNAME=$db_username
 ENV TELLME_MONGODB_ATLAS_PASSWORD=$db_password
 EXPOSE 8080
-CMD java -jar -XX:+UseContainerSupport /backend-0.2.jar
+CMD java -XX:+UseContainerSupport -Xmx128m -jar /backend-0.2.jar
