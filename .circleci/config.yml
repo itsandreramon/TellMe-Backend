@@ -34,6 +34,7 @@ jobs:
       - run:
           name: Deploy to Heroku
           command: |
+            heroku container:login
             heroku container:push --app tellme-backend web
             heroku container:release --app tellme-backend web
 
