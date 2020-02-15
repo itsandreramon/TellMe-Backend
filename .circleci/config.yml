@@ -27,8 +27,7 @@ jobs:
           command: |
             curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
             heroku auth:token
-      - setup_remote_docker:
-            docker_layer_caching: true
+      - setup_remote_docker
       - run:
           name: Login to Docker
           command: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
