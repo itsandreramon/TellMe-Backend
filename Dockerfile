@@ -5,7 +5,8 @@ RUN mvn -e -B dependency:resolve
 COPY src ./src
 RUN mvn -e -B package
 
-FROM openjdk:11-jre-slim
+# Use JDK because of ByteBuddy usage in ReactorDebugAgent
+FROM openjdk:11-slim
 COPY --from=builder /app/target/backend-0.2.jar /
 ARG db_username
 ARG db_password
